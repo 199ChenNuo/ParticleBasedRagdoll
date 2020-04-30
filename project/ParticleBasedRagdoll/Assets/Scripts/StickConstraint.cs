@@ -27,7 +27,7 @@ public class StickConstraint : MonoBehaviour
         m_length_sqr = 0;
         m_choice = (SatisfyChoice)2;
     }
-    public void Init(Particle b_A, Particle b_B, int choice)
+    public void init(Particle b_A, Particle b_B, int choice = 2)
     {
         /*
         if (!b_A && !b_B)

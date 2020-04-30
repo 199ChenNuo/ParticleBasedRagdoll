@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class Ragdoll : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void add_constraint(StickConstraint stick)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // TODO: implement
     }
 }

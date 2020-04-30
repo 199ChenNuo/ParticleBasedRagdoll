@@ -8,6 +8,7 @@ public class CoorSys : MonoBehaviour
     protected Quaternion m_Q;
 
     public Vector3 T() { return m_T; }
+    // TODO: replace Quaternion with Matrix 3x3
     public Quaternion Q() { return m_Q; }
 
     public CoorSys()
@@ -71,7 +72,7 @@ public class CoorSys : MonoBehaviour
     public CoorSys inverse()
     {
         Quaternion conj_q = new Quaternion(m_Q.x, m_Q.y, m_Q.z, -m_Q.w);
-        Vector3 inverse_t = conj_q * m_T;
+        Vector3 inverse_t = conj_q * -m_T;
         return new CoorSys(inverse_t, conj_q);
     }
 
