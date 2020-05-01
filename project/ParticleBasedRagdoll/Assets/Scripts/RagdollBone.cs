@@ -101,7 +101,7 @@ public class RagdollBone : MonoBehaviour
         m_coords_wcs_to_bf.xform_point(m_center);
 
         // TODO: replace Quaternion with Matrix 3x3
-        Quaternion r = new Quaternion(1, 1, 1, 0);
+        Quaternion r = new Quaternion(0, 0, 0, 1);
         m_obb.place(m_center, r);
     }
 
@@ -118,7 +118,7 @@ public class RagdollBone : MonoBehaviour
         Vector3 Z = (Utils.module(X, m_D.m_r)).normalized;
         Vector3 Y = (Utils.module(Z, X));
         // TODO: replace m_coord_R with Matrix 3x3 or write a function to convert Matrix and Quaternion
-        m_coord_R.Set(1, 1, 1, 0);
+        m_coord_R.Set(0, 0, 0, 1);
 
         m_coord_T = m_A.m_r;
         m_coords_wcs_to_bf = new CoorSys(m_coord_T, m_coord_R);
