@@ -69,6 +69,18 @@ public class CoorSys : MonoBehaviour
         v = m_Q * v;
     }
 
+    /**
+      * Transform Matrix.
+      *
+      * @param O   A reference to a rotation matrix, which should be transformed.
+      */
+      public void xform_matrix(float[][] r)
+    {
+        r = Utils.MultiplyMatrix(Utils.QuaternionTo3x3(m_Q), r);
+    }
+
+
+
     public CoorSys inverse()
     {
         Quaternion conj_q = new Quaternion(m_Q.x, m_Q.y, m_Q.z, -m_Q.w);

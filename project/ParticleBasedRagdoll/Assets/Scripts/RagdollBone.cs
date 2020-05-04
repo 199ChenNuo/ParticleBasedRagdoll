@@ -125,8 +125,23 @@ public class RagdollBone : MonoBehaviour
         m_coords_bf_to_wcs = m_coords_wcs_to_bf.inverse();
     }
 
-    void set_obb_size(float width, float hight, float depth)
+    public void set_obb_size(float width, float hight, float depth)
     {
-        // TODO: implement
+        m_obb.init(width, hight, depth);
+        m_mass = width * hight * depth;
+    }
+
+    public void set_obb_center_wcs(Vector3 center)
+    {
+        Vector3 c = center;
+        m_coords_wcs_to_bf.xform_point(c);
+        m_obb.set_center(c);
+    }
+
+    public void set_obb_orientation_wcs(float[][] ori)
+    {
+        float[][] r = ori;
+        m_coords_wcs_to_bf.xform_matrix(r);
+        m_obb.set_orientation(r);
     }
 }

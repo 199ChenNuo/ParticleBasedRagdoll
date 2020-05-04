@@ -27,6 +27,9 @@ public class Particle : MonoBehaviour
         m_inv_mass = 1;
     }
 
+    public Vector3 position() { return m_r; }
+    public void set_position(Vector3 r) { m_r = r; }
+
     public void bind(Vector3 r)
     {
         m_init_r = r;

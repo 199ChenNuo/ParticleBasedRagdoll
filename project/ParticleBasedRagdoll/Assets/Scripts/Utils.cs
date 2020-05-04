@@ -137,6 +137,10 @@ public static class Utils
     public static float[][] QuaternionToMatrix3x3(Quaternion q)
     {
         float[][] matrix =  new float[3][];
+
+        matrix[0] = new float[3];
+        matrix[1] = new float[3];
+        matrix[2] = new float[3];
         matrix[0][0] = 1 - 2 * ((q.y * q.y) + (q.z * q.z));
         matrix[1][1] = 1 - 2 * ((q.x * q.x) + (q.z * q.z));
         matrix[2][2] = 1 - 2 * ((q.y * q.y) + (q.x * q.x));
@@ -146,7 +150,69 @@ public static class Utils
         matrix[0][2] =      2 * ((q.w * q.y) + (q.x * q.z));
         matrix[2][1] =      2 * ((q.z * q.y) + (q.w * q.x));
         matrix[1][2] =      2 * ((q.z * q.y) - (q.w * q.x));
-
+        
         return matrix;
+    }
+
+    public static float[][] MultiplyMatrix(float[][] a, float[][] b)
+    {
+        float[][] c = new float[3][];
+        for(int i=0; i < 3; ++i)
+        {
+            c[i] = new float[3];
+        }
+
+        for(int col = 0; col < 3; ++col)
+        {
+            for(int row = 0; row < 3; ++row)
+            {
+                c[row][col] = 0;
+                for (int i = 0; i < 3; ++i)
+                {
+                    c[row][col] += a[row][i] * b[i][col];
+                }
+            }
+        }
+
+        return c;
+    }
+
+
+    public static float[][] Ru(float radians, Vector3 axis)
+    {
+        float[][] T = new float[3][];
+        T[0] = new float[3];
+        T[1] = new float[3];
+        T[2] = new float[3];
+
+        float cosinus = Mathf.Cos(radians);
+        float sinus = Mathf.Sin(radians);
+        Vector3 unit = axis.normalized;
+
+        T[0][0] = unit.x * unit.x + cosinus * (1 - unit.x * unit.x);
+        T[1][1] = unit.y * unit.y + cosinus * (1 - unit.y * unit.y);
+        T[2][2] = unit.z * unit.z + cosinus * (1 - unit.z * unit.z);
+
+        T[0][1] = unit.x * unit.y * (1 - cosinus) - sinus * unit.z;
+        T[0][2] = unit.x * unit.z * (1 - cosinus) + sinus * unit.y;
+
+        T[1][0] = unit.x * unit.y * (1 - cosinus) + sinus * unit.z;
+        T[1][2] = unit.y * unit.z * (1 - cosinus) - sinus * unit.x;
+
+        T[2][0] = unit.x * unit.z * (1 - cosinus) - sinus * unit.y;
+        T[2][1] = unit.y * unit.z * (1 - cosinus) + sinus * unit.x;
+
+        return T;
+    }
+
+    public static Vector3 MatrixMulVector(float[][] matrix, Vector3 v)
+    {
+        Vector3 vec = new Vector3();
+        vec.x = matrix[0][0] * v.x + matrix[0][1] * v.y + matrix[0][2] * v.z;
+        vec.y = matrix[1][0] * v.x + matrix[1][1] * v.y + matrix[1][2] * v.z;
+        vec.z = matrix[2][0] * v.x + matrix[2][1] * v.y + matrix[2][2] * v.z;
+
+        return vec;
+
     }
 }
