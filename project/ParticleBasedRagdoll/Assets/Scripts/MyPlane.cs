@@ -5,23 +5,22 @@ using UnityEngine;
 public class MyPlane : MonoBehaviour
 {
     public Vector3 m_n; // the plane normal
-    public double m_d; // the offset from the origin of the coordinate frame (in the direction of normal)
+    public float m_d; // the offset from the origin of the coordinate frame (in the direction of normal)
    
     public float get_signed_distance(Vector3 p)
     {
-        // TODO: implement
-        return 1.0f;
+        return Mathf.Abs(Utils.VecMulVecF(m_n, p) - m_d);
     }
 
     public float get_distance(Vector3 p)
     {
-        // TODO: implement
-        return 1.0f;
+        return Utils.VecMulVecF(m_n, p) - m_d;
     }
 
     public void set(Vector3 normal_BF, Vector3 point_BF)
     {
-        // TODO: implement
+        m_n = normal_BF.normalized;
+        m_d = Utils.VecMulVecF(m_n, point_BF);
     }
 
     /**
@@ -33,6 +32,11 @@ public class MyPlane : MonoBehaviour
 */
     public void set(Vector3 p1, Vector3 p2, Vector3 p3)
     {
-        // TODO: implement
+        Vector3 u1, u2, u1Xu2;
+        u1 = p2 - p1;
+        u2 = p3 - p2;
+        u1Xu2 = Vector3.Cross(u1, u2);
+        m_n = u1Xu2.normalized;
+        m_d = Utils.VecMulVecF(m_n, p1);
     }
 }

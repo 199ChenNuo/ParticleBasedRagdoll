@@ -51,6 +51,11 @@ public class RagdollBone : MonoBehaviour
         return tmp;
     }
 
+    public Vector3 position()
+    {
+        return get_obb_in_WCS().center;
+    }
+
     public void connect(RagdollBone bone)
     {
         m_ragdoll_bones.Add(bone);
@@ -77,6 +82,11 @@ public class RagdollBone : MonoBehaviour
         m_C = C;
         m_D = D;
 
+        for (int i = 0; i < 6; ++i)
+        {
+            m_stick[i] = new StickConstraint();
+        } 
+
         m_stick[0].init(A, B);
         m_stick[1].init(A, C);
         m_stick[2].init(A, D);
@@ -94,6 +104,8 @@ public class RagdollBone : MonoBehaviour
         float A_to_B = (B.m_r - A.m_r).magnitude;
         float A_to_C = (C.m_r - A.m_r).magnitude;
         float A_to_D = (D.m_r - A.m_r).magnitude;
+
+        m_obb = new OBB();
 
         set_obb_size(A_to_B, A_to_C, A_to_D);
 

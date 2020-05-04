@@ -24,6 +24,16 @@ public class BallJoint : MonoBehaviour
 
     public float m_min_length_ref;
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="A">Bone A</param>
+    /// <param name="B">Bone N</param>
+    /// <param name="p">The shared ball particle</param>
+    /// <param name="ref_p">he reference particle used to detect and correct breaches(in  bone B)</param>
+    /// <param name="angle">The angle from the plane to the cone, Defines the width of the  reach cone</param>
+    /// <param name="plane_normal">Plane normal defining the direction of the cone</param>
     public void init(RagdollBone A, RagdollBone B, Particle p, Particle ref_p,
         float angle, Vector3 plane_normal)
     {

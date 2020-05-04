@@ -11,6 +11,7 @@ public class StickConstraint : MonoBehaviour
     public double m_length;      // rest length of stick constraint
     public double m_length_sqr; // squard of rest length
     public SatisfyChoice m_choice; // Choice for satisfy strategy.
+    
     #endregion
 
     #region PropFunc
@@ -30,18 +31,31 @@ public class StickConstraint : MonoBehaviour
     public void init(Particle b_A, Particle b_B, int choice = 2)
     {
         /*
-        if (!b_A && !b_B)
-            Debug.Log("[Error] bone A and bone B needed for stick constraint.");
-        if (b_A)
+        if (b_A != null)
+        {
             SetBoneA(b_A);
+        }
         else
-            Debug.Log("[Error]  bone A needed for stick constraint..");
-        if (b_B)
+        {
+            Debug.Log("[Error]  particle A needed for stick constraint.., particle A:", b_A);
+            return;
+        }
+
+        if (b_B != null)
+        {
             SetBoneB(b_B);
+        }
         else
-            Debug.Log("[Error]  bone B needed for stick constraint..");
-    */
-        SetRestLength((m_A.m_r - m_B.m_r).magnitude);
+        {
+            Debug.Log("[Error]  Particle B needed for stick constraint..");
+            return;
+        }
+        */
+
+        SetBoneA(b_A);
+        SetBoneB(b_B);
+        SetRestLength((m_A.position() - m_B.position()).magnitude);
+        m_choice = 0;
     }
 
     public void Satisfy()
@@ -108,4 +122,7 @@ public class StickConstraint : MonoBehaviour
         m_B.m_r += (float)(diff * m_B.m_inv_mass) * delta;
     }
 
+
+
+    
 }

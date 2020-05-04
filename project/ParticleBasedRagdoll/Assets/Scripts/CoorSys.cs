@@ -76,7 +76,7 @@ public class CoorSys : MonoBehaviour
       */
       public void xform_matrix(float[][] r)
     {
-        r = Utils.MultiplyMatrix(Utils.QuaternionTo3x3(m_Q), r);
+        r = Utils.MultiplyMatrix(Utils.QuaternionToMatrix3x3(m_Q), r);
     }
 
 

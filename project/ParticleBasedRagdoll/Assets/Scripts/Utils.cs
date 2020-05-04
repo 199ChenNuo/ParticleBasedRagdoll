@@ -4,12 +4,23 @@ using UnityEngine;
 
 public static class Utils
 {
+    public static Vector3 VecMulVec(Vector3 v1, Vector3 v2)
+    {
+        return new Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+    }
+
+    public static float VecMulVecF(Vector3 v1, Vector3 v2)
+    {
+        return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    }
+
     public static Vector3 module(Vector3 v1, Vector3 v2)
     {
         return new Vector3(v1.y * v2.z - v2.y * v1.z, v2.x * v1.z - v1.x * v2.z, v1.x * v2.y - v2.x * v1.y);
     }
 
 
+    /*
     private static float[][] identityMatrix =
     {
      new []{1.0f, 0.0f, 0.0f},
@@ -53,6 +64,7 @@ public static class Utils
 
         return matrix3x3;
     }
+    */
 
     public static Quaternion Matrix3x3ToQuaternion(float[][] matrix)
     {
