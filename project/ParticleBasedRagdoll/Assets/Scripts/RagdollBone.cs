@@ -101,20 +101,35 @@ public class RagdollBone : MonoBehaviour
 
         update_coordsys();
 
-        float A_to_B = (B.m_r - A.m_r).magnitude;
-        float A_to_C = (C.m_r - A.m_r).magnitude;
-        float A_to_D = (D.m_r - A.m_r).magnitude;
+
+        float line1 = (A.position() - B.position()).magnitude;
+
+        Vector3 vec1 = C.position() - A.position();
+        Vector3 vec2 = B.position() - A.position();
+        Vector3 vecProj = Vector3.Project(vec1, vec2);
+        float line2 = Mathf.Sqrt(Mathf.Pow(Vector3.Magnitude(vec1), 2) - Mathf.Pow(Vector3.Magnitude(vecProj), 2));
+
+
+        Vector3 vec3 = D.position() - A.position();
+
+        // float line3 = Vector3.Project(Vector3.Cross(vec1, vec2), vec3).magnitude;
+        Plane tmp_plane = new Plane(A.position(), B.position(), C.position());
+        float line3 = tmp_plane.GetDistanceToPoint(D.position());
+
+        float A_to_B = vec2.magnitude;
+        float A_to_C = vec1.magnitude;
+        float A_to_D = vec3.magnitude;
+
+        m_mass = A_to_B * A_to_C * A_to_D;
 
         m_obb = new OBB();
 
-        set_obb_size(A_to_B, A_to_C, A_to_D);
-
-        m_center = (A.m_r + B.m_r + C.m_r + D.m_r) / 4;
+        m_center = (A.position() + B.position() + C.position() + D.position()) / 4;
         m_coords_wcs_to_bf.xform_point(m_center);
 
         // TODO: replace Quaternion with Matrix 3x3
         Quaternion r = new Quaternion(0, 0, 0, 1);
-        m_obb.place(m_center, r);
+        m_obb.init(m_center, r, line1,line3, line2);
     }
 
     void set_coord()
@@ -126,13 +141,13 @@ public class RagdollBone : MonoBehaviour
     void update_coordsys()
     {
         // TODO: implement
-        Vector3 X = (m_B.m_r - m_A.m_r).normalized;
-        Vector3 Z = (Utils.module(X, m_D.m_r)).normalized;
+        Vector3 X = (m_B.position() - m_A.position()).normalized;
+        Vector3 Z = (Utils.module(X, m_D.position())).normalized;
         Vector3 Y = (Utils.module(Z, X));
         // TODO: replace m_coord_R with Matrix 3x3 or write a function to convert Matrix and Quaternion
         m_coord_R.Set(0, 0, 0, 1);
 
-        m_coord_T = m_A.m_r;
+        m_coord_T = m_A.position();
         m_coords_wcs_to_bf = new CoorSys(m_coord_T, m_coord_R);
         m_coords_bf_to_wcs = m_coords_wcs_to_bf.inverse();
     }

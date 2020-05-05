@@ -30,12 +30,12 @@ public class BoneVisualize : MonoBehaviour
         C = new Particle();
         D = new Particle();
 
-        A.set_position(new Vector3(-5.45f, 0, -10.0f));
-        B.set_position(new Vector3(5.45f, 0, -10.0f));
-        C.set_position(new Vector3(-5.45f, 0, 10.0f));
-        D.set_position(new Vector3(5.45f, 0, 10.0f));
+        A.set_position(new Vector3(-1f, 0, -0.5f));
+        B.set_position(new Vector3(1f, 0, -0.5f));
+        C.set_position(new Vector3(-1f, 0, 1.0f));
+        D.set_position(new Vector3(0, 2, 0f));
 
-       
+
         gb_a = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         gb_b = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         gb_c = GameObject.CreatePrimitive(PrimitiveType.Sphere);

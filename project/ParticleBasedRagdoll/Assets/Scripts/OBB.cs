@@ -21,6 +21,8 @@ public class OBB : MonoBehaviour
         m_T = Vector3.zero;
         m_R = new Quaternion(0, 0, 0, 1);
         m_ext = m_eps = new Vector3(0.5f, 0.5f, 0.5f);
+
+        m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
     }
 
     public void xform(Vector3 T, Quaternion R)
@@ -42,14 +44,16 @@ public class OBB : MonoBehaviour
     public void init(float width, float hight, float depth)
     {
         // TODO: implement
-        m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        
         Debug.Log("Modify Cube Scale");
         m_cube.transform.localScale = new Vector3(width, hight, depth);
     }
 
     // TODO: replace Quaternion with Matrix 3x3
-    public void place(Vector3 T, Quaternion R)
+    public void init(Vector3 T, Quaternion R, float width, float hight, float depth)
     {
-        // TODO: implement
+        m_cube.transform.position = T;
+        m_cube.transform.rotation = R;
+        m_cube.transform.localScale = new Vector3(width, hight, depth);
     }
 }
