@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HingeJoint : MonoBehaviour
+public class HingeJoint : Joint
 {
     public RagdollBone m_A;
     public RagdollBone m_B;

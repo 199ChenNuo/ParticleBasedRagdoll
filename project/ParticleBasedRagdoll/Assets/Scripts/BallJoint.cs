@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallJoint : MonoBehaviour
+public class BallJoint : Joint
 {
     public RagdollBone m_A;
     public RagdollBone m_B;
@@ -46,6 +46,7 @@ public class BallJoint : MonoBehaviour
         }
 
         {
+            m_stick_ref = new StickConstraint();
             m_ball_particle = p;
             m_angle_limit = Mathf.Abs(angle);
             m_pB_ref = ref_p;
@@ -55,6 +56,7 @@ public class BallJoint : MonoBehaviour
         }
 
         {
+            m_plane = new MyPlane();
             Vector3 plane_point_BF = m_ball_particle.position();
             m_coords_wcs_to_bf.xform_point(plane_point_BF);
             Vector3 plane_nornal_BF = plane_normal;
@@ -62,11 +64,11 @@ public class BallJoint : MonoBehaviour
 
             m_plane.set(plane_normal, m_ball_particle.position());
 
-            m_min_length_ref = Mathf.Sin((Mathf.PI / 2) - angle) * (m_pB_ref.transform.position - m_ball_particle.transform.position).magnitude;
+            m_min_length_ref = Mathf.Sin((Mathf.PI / 2) - angle) * (m_pB_ref.position() - m_ball_particle.position()).magnitude;
         }
     }
 
-    public void satisfy()
+    public override void satisfy()
     {
         m_coords_bf_to_wcs = new CoorSys(m_A.m_coord_T, m_A.m_coord_R);
         m_coords_wcs_to_bf = m_coords_bf_to_wcs.inverse();
@@ -77,7 +79,7 @@ public class BallJoint : MonoBehaviour
         double dist = m_plane.get_signed_distance(p);
         if (dist < m_min_length_ref)
         {
-            m_stick_ref.SetRestLength((m_pB_ref.transform.position - m_pA_1.transform.position).magnitude + (float)(m_min_length_ref - dist));
+            m_stick_ref.SetRestLength((m_pB_ref.position()- m_pA_1.position()).magnitude + (float)(m_min_length_ref - dist));
             m_stick_ref.Satisfy();
         }
     }

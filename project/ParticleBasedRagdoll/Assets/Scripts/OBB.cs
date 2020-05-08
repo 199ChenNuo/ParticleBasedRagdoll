@@ -16,6 +16,8 @@ public class OBB : MonoBehaviour
     // The extents and the collision develope along this oriented bounding boxs axis.
     public Vector3 m_eps;
 
+    public GameObject cube() { return m_cube; }
+
     public OBB()
     {
         m_T = Vector3.zero;
@@ -23,6 +25,8 @@ public class OBB : MonoBehaviour
         m_ext = m_eps = new Vector3(0.5f, 0.5f, 0.5f);
 
         m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        /// if added rigid body, m_cube will fall (unity built-in beheviour)
+        // m_cube.AddComponent<Rigidbody>();
     }
 
     public void xform(Vector3 T, Quaternion R)
@@ -33,6 +37,7 @@ public class OBB : MonoBehaviour
 
     public void set_center(Vector3 c)
     {
+        center = c;
         m_cube.transform.position = center;
     }
 
@@ -56,4 +61,6 @@ public class OBB : MonoBehaviour
         m_cube.transform.rotation = R;
         m_cube.transform.localScale = new Vector3(width, hight, depth);
     }
+
+    
 }

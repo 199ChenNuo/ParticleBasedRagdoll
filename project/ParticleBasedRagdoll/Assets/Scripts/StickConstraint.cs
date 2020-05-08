@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StickConstraint : MonoBehaviour
+public class StickConstraint : Joint
 {
     #region Prop
     public enum SatisfyChoice { HalfHalf = 0, SquareRoot = 1, MassInvolve = 2 };

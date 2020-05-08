@@ -35,6 +35,19 @@ public class RagdollBone : MonoBehaviour
     public Particle ParticleC() { return m_C; }
     public Particle ParticleD() { return m_D; }
 
+    public OBB get_OBB() { return m_obb; }
+
+    public void add_force(Vector3 force, float delta_t)
+    {
+        m_A.add_force(force, delta_t);
+        m_B.add_force(force, delta_t);
+        m_C.add_force(force, delta_t);
+        m_D.add_force(force, delta_t);
+
+        set_obb_center_wcs();
+
+    }
+
     public void connect(Ragdoll owner)
     {
         m_owner = owner;
@@ -138,14 +151,31 @@ public class RagdollBone : MonoBehaviour
         m_coords_bf_to_wcs = m_coords_wcs_to_bf.inverse();
     }
 
-    void update_coordsys()
+    public void update_coordsys()
     {
         // TODO: implement
         Vector3 X = (m_B.position() - m_A.position()).normalized;
         Vector3 Z = (Utils.module(X, m_D.position())).normalized;
         Vector3 Y = (Utils.module(Z, X));
-        // TODO: replace m_coord_R with Matrix 3x3 or write a function to convert Matrix and Quaternion
-        m_coord_R.Set(0, 0, 0, 1);
+
+        float[][] tmp_r =
+        {
+            new float[3],
+            new float[3],
+            new float[3]
+        };
+        tmp_r[0][0] = X.x;
+        tmp_r[0][1] = X.y;
+        tmp_r[0][2] = X.z;
+        tmp_r[1][0] = Y.x;
+        tmp_r[1][1] = Y.y;
+        tmp_r[1][2] = Y.z;
+        tmp_r[1][0] = Y.x;
+        tmp_r[2][0] = Z.x;
+        tmp_r[2][1] = Z.y;
+        tmp_r[2][2] = Z.z;
+
+        m_coord_R = Utils.Matrix3x3ToQuaternion(tmp_r);
 
         m_coord_T = m_A.position();
         m_coords_wcs_to_bf = new CoorSys(m_coord_T, m_coord_R);
@@ -158,11 +188,11 @@ public class RagdollBone : MonoBehaviour
         m_mass = width * hight * depth;
     }
 
-    public void set_obb_center_wcs(Vector3 center)
+    public void set_obb_center_wcs()
     {
-        Vector3 c = center;
-        m_coords_wcs_to_bf.xform_point(c);
-        m_obb.set_center(c);
+        Vector3 center = (m_A.position() + m_B.position() + m_C.position() + m_D.position()) / 4;
+        // m_coords_wcs_to_bf.xform_point(center);
+        m_obb.set_center(center);
     }
 
     public void set_obb_orientation_wcs(float[][] ori)

@@ -89,6 +89,8 @@ public class BoneVisualize : MonoBehaviour
         line.SetPosition(6, D.position());
         line.SetPosition(7, B.position());
 
+#pragma warning disable CS0618 // 类型或成员已过时
         line.SetWidth(0.01f, 0.01f);
+#pragma warning restore CS0618 // 类型或成员已过时
     }
 }

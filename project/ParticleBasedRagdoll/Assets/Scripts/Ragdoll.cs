@@ -5,6 +5,8 @@ using UnityEngine;
 public class Ragdoll : MonoBehaviour
 {
     public List<RagdollBone> m_ragdoll_bones;
+    public List<Joint> m_joints;
+    public int m_itertaion = 1;
 
     public float m_friction;
 
@@ -23,6 +25,8 @@ public class Ragdoll : MonoBehaviour
     public Ragdoll()
     {
         m_friction = 0.00025f;
+        m_ragdoll_bones = new List<RagdollBone>();
+        m_joints = new List<Joint>();
     }
 
     public void clear()
@@ -30,14 +34,36 @@ public class Ragdoll : MonoBehaviour
         m_ragdoll_bones.Clear();
     }
 
-    public void add_constraint(StickConstraint stick)
+    public void add_constraint(Joint joint)
     {
         // TODO: implement
+        m_joints.Add(joint);
     }
 
-    public void run()
+    public void run(Vector3 gravity, float delta_T)
     { 
         // TODO: implement
+        // Add force to each bone, and update their speed and position
+        foreach (RagdollBone bone in m_ragdoll_bones)
+        {
+            bone.add_force(gravity, delta_T);
+        }
+
+        for (int i = 0; i < m_itertaion; ++i)
+        {
+            foreach (RagdollBone bone in m_ragdoll_bones)
+            {
+                bone.update_coordsys();
+            }
+
+            collision_detection();
+            
+           foreach (Joint j in m_joints)
+            {
+                j.satisfy();
+            }
+
+        }
     }
 
     void collision_detection()

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Joint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public virtual void satisfy()
     {
-        
+        // Base class function.
+        // Debug.Log("Joint@satisfy()");
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void init(RagdollBone boneA, RagdollBone boneB)
     {
-        
+        // Base class function.
+        // Debug.Log("Joint@init()");
     }
 }
