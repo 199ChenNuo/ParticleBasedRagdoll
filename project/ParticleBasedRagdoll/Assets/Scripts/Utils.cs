@@ -145,7 +145,6 @@ public static class Utils
         return new Quaternion(m_v.x, m_v.y, m_v.z, m_s);
     }
 
-    // TODO: math_matrix3x3.h @ operator=
     public static float[][] QuaternionToMatrix3x3(Quaternion q)
     {
         float[][] matrix =  new float[3][];

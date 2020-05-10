@@ -56,7 +56,7 @@ public class BoneVisualize : MonoBehaviour
         gb_c.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/AlphaMaterial");
         gb_d.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/AlphaMaterial");
 
-        bone = new RagdollBone();
+        bone = new RagdollBone(false);
         bone.init(ragdoll, A, B, C, D);
 
          line = this.gameObject.AddComponent<LineRenderer>();

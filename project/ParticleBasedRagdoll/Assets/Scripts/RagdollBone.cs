@@ -2,12 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RagdollBone : MonoBehaviour
+public class RagdollBone:MonoBehaviour
 {
     public Particle m_A;
     public Particle m_B;
     public Particle m_C;
     public Particle m_D;
+
+    public GameObject gb_a;
+    public GameObject gb_b;
+    public GameObject gb_c;
+    public GameObject gb_d;
+
+    public string m_name;
+    public string name() { return m_name; }
+    public void setname(string name) { m_name = name; }
+
+    LineRenderer line;
+
+    public bool visualiza_particle;
 
     public Ragdoll m_owner;
     public List<StickConstraint> m_stick = new List<StickConstraint>(new StickConstraint[6]);
@@ -28,7 +41,6 @@ public class RagdollBone : MonoBehaviour
 
     public double m_mass;
     public bool m_fixed;
-    public string m_name;
 
     public Particle ParticleA() { return m_A; }
     public Particle ParticleB() { return m_B; }
@@ -77,28 +89,127 @@ public class RagdollBone : MonoBehaviour
     {
         m_ragdoll_bones.Remove(bone);
     }
+    public bool is_connect(RagdollBone bone)
+    {
+        return m_ragdoll_bones.Contains(bone);
+    }
 
-    public RagdollBone()
+    public RagdollBone(bool visualize = false)
     {
         m_A = m_B = m_C = m_D = null;
         m_owner = null;
         m_color = Color.blue;
         m_fixed = false;
         m_mass = 1;
+        m_ragdoll_bones = new List<RagdollBone>();
+        visualiza_particle = visualize;
+
+        if (visualiza_particle)
+        {
+            gb_a = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            gb_b = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            gb_c = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            gb_d = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+            gb_a.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/AlphaMaterial");
+            gb_b.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/AlphaMaterial");
+            gb_c.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/AlphaMaterial");
+            gb_d.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/AlphaMaterial");
+
+            gb_a.name = m_name + "-p_A";
+            gb_b.name = m_name + "-p_B";
+            gb_c.name = m_name + "-p_C";
+            gb_d.name = m_name + "-p_D";
+
+            line = gb_a.AddComponent<LineRenderer>();
+            line.material = Resources.Load<Material>("Materials/AlphaMaterial");
+        }
     }
 
-    public void init(Ragdoll owner, Particle A, Particle B, Particle C, Particle D)
+    void set_position()
+    {
+        // TODO: find out why boneB in BallJointTest won't move
+        /*
+        if (m_name == "boneB")
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                foreach (StickConstraint stick in m_stick)
+                {
+                    Debug.Log("================" + stick.name() + "===============");
+                    Debug.Log(stick.m_length);
+                    Debug.Log((stick.m_A.position() - stick.m_B.position()).magnitude);
+                    stick.satisfy();
+                }
+            }
+        }
+        */
+
+        if (visualiza_particle)
+        {
+            gb_a.transform.position = m_A.position();
+            gb_b.transform.position = m_B.position();
+            gb_c.transform.position = m_C.position();
+            gb_d.transform.position = m_D.position();
+
+
+#pragma warning disable CS0618 // 类型或成员已过时
+            line.SetVertexCount(9);
+#pragma warning restore CS0618 // 类型或成员已过时
+            line.SetPosition(0, m_A.position());
+            line.SetPosition(1, m_B.position());
+            line.SetPosition(2, m_C.position());
+            line.SetPosition(3, m_D.position());
+            line.SetPosition(4, m_A.position());
+            line.SetPosition(5, m_C.position());
+            line.SetPosition(6, m_D.position());
+            line.SetPosition(7, m_B.position());
+
+#pragma warning disable CS0618 // 类型或成员已过时
+            line.SetWidth(0.01f, 0.01f);
+#pragma warning restore CS0618 // 类型或成员已过时
+        }
+
+    }
+
+    public void set_visualize_particle(bool flag)
+    {
+        visualiza_particle = flag;
+
+    }
+
+    public void draw_particle()
+    {
+
+
+    }
+
+    public void update_position()
+    {
+        set_position();
+    }
+
+    public void init(Ragdoll owner, Particle A, Particle B, Particle C, Particle D, string name = "bone")
     {
         m_owner = owner;
         m_A = A;
         m_B = B;
         m_C = C;
         m_D = D;
+        m_name = name;
+
+        if (visualiza_particle)
+        {
+            gb_a.name = m_name + "-p_A";
+            gb_b.name = m_name + "-p_B";
+            gb_c.name = m_name + "-p_C";
+            gb_d.name = m_name + "-p_D";
+        }
 
         for (int i = 0; i < 6; ++i)
         {
             m_stick[i] = new StickConstraint();
-        } 
+        }
 
         m_stick[0].init(A, B);
         m_stick[1].init(A, C);
@@ -106,6 +217,14 @@ public class RagdollBone : MonoBehaviour
         m_stick[3].init(B, C);
         m_stick[4].init(B, D);
         m_stick[5].init(C, D);
+        m_stick[0].setname(m_name + "-0");
+        m_stick[1].setname(m_name + "-1");
+        m_stick[2].setname(m_name + "-2");
+        m_stick[3].setname(m_name + "-3");
+        m_stick[4].setname(m_name + "-4");
+        m_stick[5].setname(m_name + "-5");
+
+
 
         for (int i = 0; i < 6; ++i)
         {
@@ -142,7 +261,7 @@ public class RagdollBone : MonoBehaviour
 
         // TODO: replace Quaternion with Matrix 3x3
         Quaternion r = new Quaternion(0, 0, 0, 1);
-        m_obb.init(m_center, r, line1,line3, line2);
+        m_obb.init(m_center, r, line1, line3, line2);
     }
 
     void set_coord()
@@ -153,7 +272,6 @@ public class RagdollBone : MonoBehaviour
 
     public void update_coordsys()
     {
-        // TODO: implement
         Vector3 X = (m_B.position() - m_A.position()).normalized;
         Vector3 Z = (Utils.module(X, m_D.position())).normalized;
         Vector3 Y = (Utils.module(Z, X));

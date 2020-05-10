@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Joint : MonoBehaviour
+public class Joint
 {
     public virtual void satisfy()
     {

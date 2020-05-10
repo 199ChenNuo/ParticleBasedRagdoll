@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BallJointTest : MonoBehaviour
 {
-    public Vector3 gravity = new Vector3(0, -9.8f, 0);
+    public Vector3 gravity = new Vector3(0, 0, 0);
     public Ragdoll ragdoll;
 
     #region Particles
@@ -43,8 +43,8 @@ public class BallJointTest : MonoBehaviour
             B2 = new Particle();
             B3 = new Particle();
 
-            boneA = new RagdollBone();
-            boneB = new RagdollBone();
+            boneA = new RagdollBone(true);
+            boneB = new RagdollBone(true);
 
             ball = new BallJoint();
 
@@ -63,14 +63,30 @@ public class BallJointTest : MonoBehaviour
         }
 
         {
-            boneA.init(ragdoll, A1, A2, A3, A4);
-            boneB.init(ragdoll, B1, B2, B3, A4);
+            boneA.init(ragdoll, A1, A2, A3, A4, "boneA");
+            boneB.init(ragdoll, B1, B2, B3, A4, "boneB");
         }
 
         {
             ragdoll.add_constraint(ball);
             ragdoll.add_ragdoll_bone(boneA);
             ragdoll.add_ragdoll_bone(boneB);
+
+            foreach (StickConstraint stickConstraint in boneA.m_stick)
+            {
+                ragdoll.add_constraint(stickConstraint);
+            }
+            
+            foreach (StickConstraint stickConstraint in boneB.m_stick)
+            {
+                ragdoll.add_constraint(stickConstraint);
+            }
+            
+            /*
+            ragdoll.add_constraint(boneB.m_stick[0]);
+            ragdoll.add_constraint(boneB.m_stick[2]);
+            ragdoll.add_constraint(boneB.m_stick[4]);
+            */
         }
 
         {
@@ -86,6 +102,15 @@ public class BallJointTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ragdoll.m_ragdoll_bones[0].add_force(new Vector3(0, -0.1f, 0), Time.deltaTime);
+
         ragdoll.run(gravity, Time.deltaTime);
+
+        /*
+        foreach (StickConstraint stick in ragdoll.m_ragdoll_bones[1].m_stick)
+        {
+            stick.satisfy();
+        }
+        */
     }
 }

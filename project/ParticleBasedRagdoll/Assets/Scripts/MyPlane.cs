@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyPlane : MonoBehaviour
+public class MyPlane
 {
     public Vector3 m_n; // the plane normal
     public float m_d; // the offset from the origin of the coordinate frame (in the direction of normal)

@@ -141,7 +141,7 @@ public class HingeJoint : Joint
         }
     }
 
-    public void satisfy()
+    public override void satisfy()
     {
         switch (m_choice)
         {

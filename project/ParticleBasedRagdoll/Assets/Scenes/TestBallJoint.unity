@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9162a780116d97642b942a04f07696cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: {x: 0, y: -9.8, z: 0}
+  gravity: {x: 0, y: 0, z: 0}
   ragdoll: {fileID: 0}
   A1: {fileID: 0}
   A2: {fileID: 0}

@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ragdoll : MonoBehaviour
+public class Ragdoll
 {
     public List<RagdollBone> m_ragdoll_bones;
-    public List<Joint> m_joints;
-    public int m_itertaion = 1;
+    public List<BallJoint> m_ball_joints;
+    public List<StickConstraint> m_stick_constraints;
+    public int m_itertaion = 3;
 
     public float m_friction;
 
     public void add_ragdoll_bone(RagdollBone bone)
     {
+        // TODO: atomatice add stick constraint in bone to ragdoll
         bone.connect(this);
         m_ragdoll_bones.Add(bone);
     }
@@ -26,7 +28,8 @@ public class Ragdoll : MonoBehaviour
     {
         m_friction = 0.00025f;
         m_ragdoll_bones = new List<RagdollBone>();
-        m_joints = new List<Joint>();
+        m_ball_joints = new List<BallJoint>();
+        m_stick_constraints = new List<StickConstraint>(); 
     }
 
     public void clear()
@@ -34,16 +37,20 @@ public class Ragdoll : MonoBehaviour
         m_ragdoll_bones.Clear();
     }
 
-    public void add_constraint(Joint joint)
+    public void add_constraint(BallJoint joint)
     {
         // TODO: implement
-        m_joints.Add(joint);
+        m_ball_joints.Add(joint);
+    }
+
+    public void add_constraint(StickConstraint stick)
+    {
+        m_stick_constraints.Add(stick);
     }
 
     public void run(Vector3 gravity, float delta_T)
-    { 
-        // TODO: implement
-        // Add force to each bone, and update their speed and position
+    {
+
         foreach (RagdollBone bone in m_ragdoll_bones)
         {
             bone.add_force(gravity, delta_T);
@@ -57,10 +64,25 @@ public class Ragdoll : MonoBehaviour
             }
 
             collision_detection();
-            
-           foreach (Joint j in m_joints)
+
+            /*
+            foreach (Joint j in m_joints)
             {
                 j.satisfy();
+            }
+            */
+            foreach (BallJoint ballJoint in m_ball_joints)
+            {
+                ballJoint.satisfy();
+            }
+            foreach(StickConstraint stickConstraint in m_stick_constraints)
+            {
+                stickConstraint.satisfy();
+            }
+
+            foreach (RagdollBone bone in m_ragdoll_bones)
+            {
+                bone.update_position();
             }
 
         }
@@ -70,7 +92,18 @@ public class Ragdoll : MonoBehaviour
     {
         int collisions = 0;
         Vector3[] collision_points = new Vector3[16];
+        Vector3 n;
+        float[] disconnect = new float[16];
 
+        for (int i = 0; i < m_ragdoll_bones.Count; ++i)
+        {
+            for (int j = i + 1; j < m_ragdoll_bones.Count; ++j)
+            {
+                if (m_ragdoll_bones[i].is_connect(m_ragdoll_bones[j])) { continue; }
+
+                // detect collision for bone[i] and bone[j]
+            }
+        }
         // TODO: implement
     }
 

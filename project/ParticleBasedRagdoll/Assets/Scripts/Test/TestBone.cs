@@ -21,7 +21,7 @@ public class TestBone : MonoBehaviour
         A3 = new Particle();
         A4 = new Particle();
 
-        boneA = new RagdollBone();
+        boneA = new RagdollBone(false);
 
         ragdoll = new Ragdoll();
 
@@ -40,6 +40,6 @@ public class TestBone : MonoBehaviour
     void Update()
     {
         // set gracity to 0 for observation
-        ragdoll.run(new Vector3(0, -0f, 0), Time.deltaTime);
+        ragdoll.run(new Vector3(0, 0, 0), Time.deltaTime);
     }
 }

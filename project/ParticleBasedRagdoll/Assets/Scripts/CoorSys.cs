@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoorSys : MonoBehaviour
+public class CoorSys
 {
     protected Vector3 m_T;
     protected Quaternion m_Q;
@@ -25,12 +25,9 @@ public class CoorSys : MonoBehaviour
 
     public static bool operator ==(CoorSys val1, CoorSys val2)
     {
-        if (val1 && val2)
+        if (val1.m_T == val2.m_T && val1.m_Q == val2.m_Q)
         {
-            if (val1.m_T == val2.m_T && val1.m_Q == val2.m_Q)
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }
@@ -38,6 +35,11 @@ public class CoorSys : MonoBehaviour
     public static bool operator !=(CoorSys val1, CoorSys val2)
     {
         return !(val1 == val2);
+    }
+
+    public override bool Equals(object other)
+    {
+        return this == (CoorSys)other;
     }
 
 
@@ -74,7 +76,7 @@ public class CoorSys : MonoBehaviour
       *
       * @param O   A reference to a rotation matrix, which should be transformed.
       */
-      public void xform_matrix(float[][] r)
+    public void xform_matrix(float[][] r)
     {
         r = Utils.MultiplyMatrix(Utils.QuaternionToMatrix3x3(m_Q), r);
     }
@@ -88,4 +90,13 @@ public class CoorSys : MonoBehaviour
         return new CoorSys(inverse_t, conj_q);
     }
 
+    public override int GetHashCode()
+    {
+        return m_T.GetHashCode() + m_Q.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return m_T.ToString() + m_Q.ToString();
+    }
 }

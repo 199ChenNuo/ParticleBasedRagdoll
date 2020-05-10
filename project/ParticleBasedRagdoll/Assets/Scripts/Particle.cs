@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Particle : MonoBehaviour
+public class Particle
 {
     public bool m_coupled;      // Boolean flag indicating whether the particle position is coupled. Default is false.
     public Vector3 m_old_r;     // old position

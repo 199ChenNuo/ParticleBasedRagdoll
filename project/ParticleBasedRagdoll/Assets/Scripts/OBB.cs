@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OBB : MonoBehaviour
+public class OBB
 {
     public GameObject m_cube;
     public Vector3 center;

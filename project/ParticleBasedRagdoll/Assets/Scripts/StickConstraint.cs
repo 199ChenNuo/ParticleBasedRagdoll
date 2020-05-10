@@ -11,13 +11,15 @@ public class StickConstraint : Joint
     public double m_length;      // rest length of stick constraint
     public double m_length_sqr; // squard of rest length
     public SatisfyChoice m_choice; // Choice for satisfy strategy.
-    
+    public string m_name;
     #endregion
 
     #region PropFunc
     public void SetBoneA(Particle b_A) { m_A = b_A; }
     public void SetBoneB(Particle b_B) { m_B = b_B; }
     public void SetRestLength(float len) { m_length = len; }
+    public void setname(string name) { m_name = name; }
+    public string name() { return m_name; }
     #endregion
 
     public StickConstraint()
@@ -55,7 +57,7 @@ public class StickConstraint : Joint
         SetBoneA(b_A);
         SetBoneB(b_B);
         SetRestLength((m_A.position() - m_B.position()).magnitude);
-        m_choice = 0;
+        m_choice = SatisfyChoice.HalfHalf;
     }
 
     public void Satisfy()
@@ -90,11 +92,15 @@ public class StickConstraint : Joint
     /// </summary>
     public void SatisfyType0()
     {
-        Vector3 delta = m_A.m_r - m_B.m_r;
+        Vector3 delta = m_A.position() - m_B.position();
         float delta_length = delta.magnitude;
         float diff = 0.5f * (float)((delta_length - m_length) / delta_length);
+
+        
         m_A.m_r -= diff * delta;
         m_B.m_r += diff * delta;
+        
+       
     }
 
     /// <summary>
@@ -102,7 +108,7 @@ public class StickConstraint : Joint
     /// </summary>
     public void SatisfyType1()
     {
-        Vector3 delta = m_A.m_r - m_B.m_r;
+        Vector3 delta = m_A.position() - m_B.position();
         float delta_sqr = delta.sqrMagnitude;
         float approx = (float)m_length_sqr / (float)(delta_sqr + m_length_sqr) - 0.5f;
         delta *= approx;
@@ -115,7 +121,7 @@ public class StickConstraint : Joint
     /// </summary>
     public void SatisfyType2()
     {
-        Vector3 delta = m_A.m_r - m_B.m_r;
+        Vector3 delta = m_A.position() - m_B.position();
         float delta_length = delta.magnitude;
         float diff = (float)(delta_length - m_length) / (float)(delta_length * (m_A.m_inv_mass + m_B.m_inv_mass));
         m_A.m_r -= (float)(diff * m_A.m_inv_mass) * delta;

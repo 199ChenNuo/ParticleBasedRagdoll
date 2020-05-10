@@ -25,6 +25,8 @@ public class RagdollRunTest : MonoBehaviour
         ragdoll.add_constraint(ball);
         ragdoll.add_ragdoll_bone(boneA);
         ragdoll.add_ragdoll_bone(boneB);
+
+        
     }
 
     // Update is called once per frame

@@ -24,10 +24,10 @@ public class TmpTest : MonoBehaviour
     {
         ragdoll = new Ragdoll();
 
-        m_boneA= new RagdollBone();
+        m_boneA= new RagdollBone(false);
         m_boneA.init(ragdoll, p1, p2, p3, p4);
 
-        m_boneB = new RagdollBone();
+        m_boneB = new RagdollBone(false);
         m_boneB.init(ragdoll, p4, p5, p6, p7);
 
         m_ball_joint = new BallJoint();
