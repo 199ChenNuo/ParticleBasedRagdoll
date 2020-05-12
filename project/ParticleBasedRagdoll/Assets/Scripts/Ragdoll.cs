@@ -122,4 +122,213 @@ public class Ragdoll
         // TODO: implement
     }
 
+    // set up a human with center being `position`
+    public void set_up_human(Vector3 position, float size)
+    {
+        // ground
+        // p0
+        Particle ground_A = new Particle();
+        // p1
+        Particle ground_B = new Particle();
+        // p2
+        Particle ground_C = new Particle();
+        // p3
+        Particle ground_D = new Particle();
+        ground_A.set_position(new Vector3(100, -100, -400) * size + position);
+        ground_B.set_position(new Vector3(100, 100, -400) * size + position);
+        ground_C.set_position(new Vector3(-100, -100, -400) * size + position);
+        ground_D.set_position(new Vector3(-100, 100, -400) * size + position);
+        RagdollBone ground = new RagdollBone();
+        ground.init(this, ground_A, ground_B, ground_C, ground_D, "ground");
+
+        // head
+        // p4
+        Particle head_A = new Particle();
+        // p5
+        Particle head_B = new Particle();
+        // p6
+        Particle head_C = new Particle();
+        // p7
+        Particle head_D = new Particle();
+        head_A.set_position(new Vector3(-5.45f, 0, -10) * size + position);
+        head_B.set_position(new Vector3(5.45f, 0, -10) * size + position);
+        head_C.set_position(new Vector3(-5.45f, 0, 10) * size + position);
+        head_D.set_position(new Vector3(5.45f, 0, 10) * size + position);
+        RagdollBone head = new RagdollBone();
+        head.init(this, head_A, head_B, head_C, head_D, "head");
+
+        // neck, shares particles head_A -> neck_A, head_B -> neck_B
+        // p8
+        Particle neck_C = new Particle();
+        // p9
+        Particle neck_D = new Particle();
+        neck_C.set_position(new Vector3(0, 0, -22.3f) * size + position);
+        neck_D.set_position(new Vector3(0, 0, -15) * size + position);
+        RagdollBone neck = new RagdollBone();
+        neck.init(this, head_A, head_B, neck_C, neck_D);
+
+
+        // chest, shares particles neck_C -> chest_A
+        // p10
+        Particle chest_B = new Particle();
+        // p11
+        Particle chest_C = new Particle();
+        // p12
+        Particle chest_D = new Particle();
+        chest_B.set_position(new Vector3(19.6f, 0, 26.7f) * size + position);
+        chest_C.set_position(new Vector3(-19.6f, 0, -26.7f) * size + position);
+        chest_D.set_position(new Vector3(0, 0, -61.5f) * size + position);
+        RagdollBone chest = new RagdollBone();
+        chest.init(this, neck_C, chest_B, chest_C, chest_D, "chest");
+
+        // hip, shares particle chest_D -> hip_A
+        // p13
+        Particle hip_B = new Particle();
+        // p14
+        Particle hip_C = new Particle();
+        // p15
+        Particle hip_D = new Particle();
+        hip_B.set_position(new Vector3(0, 0, -70.4f) * size + position);
+        hip_C.set_position(new Vector3(9.45f, 0, -77.7f) * size + position);
+        hip_D.set_position(new Vector3(-9.45f, 0, -77.7f) * size + position);
+        RagdollBone hip = new RagdollBone();
+        hip.init(this, chest_D, hip_B, hip_C, hip_D, "hip");
+
+        // left overarm, chest_C->leaftOverarm_A
+        // p16
+        Particle leftOverarm_B = new Particle();
+        // p17
+        Particle leftOverarm_C = new Particle();
+        // p18
+        Particle leftOverarm_D = new Particle();
+        leftOverarm_B.set_position(new Vector3(37.9f, 0, -26.7f) * size + position);
+        leftOverarm_C.set_position(new Vector3(56.2f, 0, 30.95f) * size + position);
+        leftOverarm_D.set_position(new Vector3(56.2f, 0, -22.45f) * size + position);
+        RagdollBone leftOverarm = new RagdollBone();
+        leftOverarm.init(this, chest_B, leftOverarm_B, leftOverarm_C, leftOverarm_D, "left overarm");
+
+        // right overarm, chect_C->rightOverarm_A
+        // p19
+        Particle rightOverarm_B = new Particle();
+        // p20
+        Particle rightOverarm_C = new Particle();
+        // p21
+        Particle rightOverarm_D = new Particle();
+        rightOverarm_B.set_position(new Vector3(-37.9f, 0, -26.7f) * size + position);
+        rightOverarm_C.set_position(new Vector3(-56.2f, 0, -30.95f) * size + position);
+        rightOverarm_D.set_position(new Vector3(-56.2f, 0, -22.45f) * size + position);
+        RagdollBone rightOverarm = new RagdollBone();
+        rightOverarm.init(this, chest_C, rightOverarm_B, rightOverarm_C, rightOverarm_D, "right overarm");
+
+        // left underarm, 
+        // p22
+        Particle leftUnderarm_A = new Particle();
+        // p23
+        Particle leftUnderarm_B = new Particle();
+        leftUnderarm_A.set_position(new Vector3(85, 0, -30.95f) * size + position);
+        leftUnderarm_B.set_position(new Vector3(85, 0, -22.45f) * size + position);
+        RagdollBone leftUnderarm = new RagdollBone();
+        leftUnderarm.init(this, leftOverarm_C, leftOverarm_D, leftUnderarm_A, leftUnderarm_B, "left underarm");
+        
+        // right underarm
+        // p24
+        Particle rightUnderarm_A = new Particle();
+        // p25
+        Particle rightUnderarm_B = new Particle();
+        rightUnderarm_A.set_position(new Vector3(-85, 0, -30.95f) * size + position);
+        rightUnderarm_B.set_position(new Vector3(-95, 0, -22.45f) * size + position);
+        RagdollBone rightUnderarm = new RagdollBone();
+        rightUnderarm.init(this, rightOverarm_C, rightOverarm_D, rightUnderarm_A, rightUnderarm_B, "right underarm");
+
+        // left hand
+        // p26
+        Particle leftHand_C = new Particle();
+        // p27
+        Particle leftHand_D = new Particle();
+        leftHand_C.set_position(new Vector3(93.9f, 0, -30.95f) * size + position);
+        leftHand_D.set_position(new Vector3(93.9f, 0, -22.45f) * size + position);
+        RagdollBone leftHand = new RagdollBone();
+        leftHand.init(this, leftUnderarm_A, leftUnderarm_B, leftHand_C, leftHand_D, "left hand");
+
+        //right hand
+        // p28
+        Particle rightHand_C = new Particle();
+        // p29
+        Particle rightHand_D = new Particle();
+        rightHand_C.set_position(new Vector3(-93.9f, 0, -30.95f) * size + position);
+        rightHand_D.set_position(new Vector3(-93.9f, 0, -22.45f) * size + position);
+        RagdollBone rightHand = new RagdollBone();
+        rightHand.init(this, rightUnderarm_A, rightUnderarm_B, rightHand_C, rightHand_D, "right hand");
+
+        // left thigh
+        // p30
+        Particle leftThigh_B = new Particle();
+        // p31
+        Particle leftThigh_C = new Particle();
+        // p32
+        Particle leftThigh_D = new Particle();
+        leftThigh_B.set_position(new Vector3(9.45f, 0, 100) * size + position);
+        leftThigh_C.set_position(new Vector3(4.15f, 0, -128.9f) * size + position);
+        leftThigh_D.set_position(new Vector3(14.75f, 0, -128.9f) * size + position);
+        RagdollBone leftThigh = new RagdollBone();
+        leftThigh.init(this, hip_C, leftThigh_B, leftThigh_C, leftThigh_D, "left thigh");
+       
+        // right thigh
+        // p33
+        Particle rightThigh_B = new Particle();
+        // p34
+        Particle rightThigh_C = new Particle();
+        // p35
+        Particle rightThigh_D = new Particle();
+        rightThigh_B.set_position(new Vector3(-9.45f, 0, -100) * size + position);
+        rightThigh_C.set_position(new Vector3(-4.15f, 0, -128.9f) * size + position);
+        rightThigh_D.set_position(new Vector3(-14.75f, 0, -128.9f) * size + position);
+        RagdollBone rightThigh = new RagdollBone();
+        rightThigh.init(this, hip_D, rightThigh_B, rightThigh_C, rightThigh_D, "right thigh");
+
+        // left calf
+        // p36
+        Particle leftCalf_A = new Particle();
+        // p37
+        Particle leftCalf_B = new Particle();
+        leftCalf_A.set_position(new Vector3(4.15f, 0, -159.4f) * size + position);
+        leftCalf_B.set_position(new Vector3(14.75f, 0, -159.4f) * size + position);
+        RagdollBone leftCalf = new RagdollBone();
+        leftCalf.init(this, leftThigh_C, leftThigh_D, leftCalf_A, leftCalf_B, "left calf");
+
+        // right calf
+        // p38
+        Particle rightCalf_A = new Particle();
+        // p39
+        Particle rightCalf_B = new Particle();
+        rightCalf_A.set_position(new Vector3(-4.15f, 0, -159.4f) * size + position);
+        rightCalf_B.set_position(new Vector3(-14.75f, 0, -159.4f) * size + position);
+        RagdollBone rightCalf = new RagdollBone();
+        rightCalf.init(this, rightThigh_C, rightThigh_D, rightCalf_A, rightCalf_B, "right calf");
+        
+        // left foot
+        // p40
+        Particle leftFoot_C = new Particle();
+        // p41
+        Particle leftFoot_D = new Particle();
+        leftFoot_C.set_position(new Vector3(4.15f, -10, -173.3f) * size + position);
+        leftFoot_D.set_position(new Vector3(14.75f, -10, -173.3f) * size + position);
+        RagdollBone leftFoot = new RagdollBone();
+        leftFoot.init(this, leftCalf_A, leftCalf_B, leftFoot_C, leftFoot_D, "left foot");
+
+
+        // right foot
+        // p42
+        Particle rightFoot_C = new Particle();
+        // p43
+        Particle rightFoot_D = new Particle();
+        rightFoot_C.set_position(new Vector3(-4.15f, -10, -173.3f) * size + position);
+        rightFoot_D.set_position(new Vector3(-14.75f, -10, -173.3f) * size + position);
+        RagdollBone rightFoot = new RagdollBone();
+        rightFoot.init(this, rightCalf_A, rightCalf_B, rightFoot_C, rightFoot_D, "right foot");
+
+
+
+    }
+
 }
