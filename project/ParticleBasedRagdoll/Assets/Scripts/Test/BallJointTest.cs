@@ -43,8 +43,8 @@ public class BallJointTest : MonoBehaviour
             B2 = new Particle();
             B3 = new Particle();
 
-            boneA = new RagdollBone(true);
-            boneB = new RagdollBone(true);
+            boneA = new RagdollBone(false);
+            boneB = new RagdollBone(false);
 
             ball = new BallJoint();
 

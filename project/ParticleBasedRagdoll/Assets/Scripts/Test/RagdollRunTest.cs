@@ -4,29 +4,15 @@ using UnityEngine;
 
 public class RagdollRunTest : MonoBehaviour
 {
-    public Vector3 gravity = new Vector3(0, -9.8f, 0);
+    public Vector3 gravity = new Vector3(0, 0, 0);
     public Ragdoll ragdoll;
-
-    public Particle A;
-    public Particle B;
-    public Particle C;
-    public Particle D;
-
-    public RagdollBone boneA = new RagdollBone();
-    public RagdollBone boneB = new RagdollBone();
-
-    public BallJoint ball = new BallJoint();
 
     // Start is called before the first frame update
     void Start()
     {
         ragdoll = new Ragdoll();
 
-        ragdoll.add_constraint(ball);
-        ragdoll.add_ragdoll_bone(boneA);
-        ragdoll.add_ragdoll_bone(boneB);
-
-        
+        ragdoll.set_up_human(Vector3.zero, 1, true);
     }
 
     // Update is called once per frame
