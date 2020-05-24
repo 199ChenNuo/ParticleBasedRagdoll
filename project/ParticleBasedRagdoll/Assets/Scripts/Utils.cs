@@ -19,53 +19,6 @@ public static class Utils
         return new Vector3(v1.y * v2.z - v2.y * v1.z, v2.x * v1.z - v1.x * v2.z, v1.x * v2.y - v2.x * v1.y);
     }
 
-
-    /*
-    private static float[][] identityMatrix =
-    {
-     new []{1.0f, 0.0f, 0.0f},
-     new []{0.0f, 1.0f, 0.0f},
-     new []{0.0f, 0.0f, 1.0f}
-    };
-
-    // TODO: or use Math.NET -> Matrix3x3
-    public static float[][] QuaternionTo3x3(this Quaternion value)
-    {
-        float[][] matrix3x3 =
-        {
-         new float[3],
-         new float[3],
-         new float[3],
-        };
-
-        float[][] symetricalMatrix =
-        {
-         new float[3] {(-(value.y * value.y) - (value.z * value.z)), value.x * value.y,                                       value.x * value.z},
-         new float[3] {value.x * value.y, (-(value.x * value.x) - (value.z * value.z)), value.y * value.z},
-         new float[3] {value.x * value.z, value.y * value.z, (-(value.x * value.x) - (value.y * value.y))}
-        };
-
-        float[][] antiSymetricalMatrix =
-        {
-         new[] {0.0f, -value.z, value.y},
-         new []{value.z, 0.0f, -value.x},
-         new []{-value.y, value.x, 0.0f}
-        };
-
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                matrix3x3[i][j] = identityMatrix[i][j] +
-                          (2.0f * symetricalMatrix[i][j]) +
-                          (2.0f * value.w * antiSymetricalMatrix[i][j]);
-            }
-        }
-
-        return matrix3x3;
-    }
-    */
-
     public static Quaternion Matrix3x3ToQuaternion(float[][] matrix)
     {
         float m_s; // real part, the w in Quaternion
@@ -225,5 +178,26 @@ public static class Utils
 
         return vec;
 
+    }
+
+    public static float[][] Vector3s2Matrix(Vector3 x, Vector3 y, Vector3 z)
+    {
+        float[][] T = new float[3][];
+        T[0] = new float[3];
+        T[1] = new float[3];
+        T[2] = new float[3];
+
+        T[0][0] = x.x;
+        T[1][0] = x.y;
+        T[2][0] = x.z;
+        T[0][1] = y.x;
+        T[1][1] = y.y;
+        T[2][1] = y.z;
+        T[0][2] = z.x;
+        T[1][2] = z.y;
+        T[2][2] = z.z;
+
+
+        return T;
     }
 }

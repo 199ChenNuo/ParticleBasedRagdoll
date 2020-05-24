@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallJoint : Joint
+public class BallJoint : MyJoint
 {
     public RagdollBone m_A;
     public RagdollBone m_B;
@@ -83,7 +83,7 @@ public class BallJoint : Joint
         if (dist < m_min_length_ref)
         {
             m_stick_ref.SetRestLength((m_pB_ref.position()- m_pA_1.position()).magnitude + (float)(m_min_length_ref - dist));
-            m_stick_ref.Satisfy();
+            m_stick_ref.satisfy();
             m_A.set_obb_center_wcs();
             m_B.set_obb_center_wcs();
         }

@@ -6,6 +6,7 @@ public class Ragdoll
 {
     public List<RagdollBone> m_ragdoll_bones;
     public List<BallJoint> m_ball_joints;
+    public List<HingeJoint> m_hinge_joints;
     public List<StickConstraint> m_stick_constraints;
     public int m_itertaion = 3;
 
@@ -29,6 +30,7 @@ public class Ragdoll
         m_friction = 0.00025f;
         m_ragdoll_bones = new List<RagdollBone>();
         m_ball_joints = new List<BallJoint>();
+        m_hinge_joints = new List<HingeJoint>();
         m_stick_constraints = new List<StickConstraint>(); 
     }
 
@@ -39,8 +41,12 @@ public class Ragdoll
 
     public void add_constraint(BallJoint joint)
     {
-        // TODO: implement
         m_ball_joints.Add(joint);
+    }
+
+    public void add_constraint(HingeJoint hinge)
+    {
+        m_hinge_joints.Add(hinge);
     }
 
     public void add_constraint(StickConstraint stick)
@@ -65,15 +71,14 @@ public class Ragdoll
 
             collision_detection();
 
-            /*
-            foreach (Joint j in m_joints)
-            {
-                j.satisfy();
-            }
-            */
+          
             foreach (BallJoint ballJoint in m_ball_joints)
             {
                 ballJoint.satisfy();
+            }
+            foreach(HingeJoint hinge in m_hinge_joints)
+            {
+                hinge.satisfy();
             }
             foreach(StickConstraint stickConstraint in m_stick_constraints)
             {

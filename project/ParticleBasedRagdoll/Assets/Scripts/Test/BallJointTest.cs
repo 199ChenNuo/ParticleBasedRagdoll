@@ -43,8 +43,8 @@ public class BallJointTest : MonoBehaviour
             B2 = new Particle();
             B3 = new Particle();
 
-            boneA = new RagdollBone(false);
-            boneB = new RagdollBone(false);
+            boneA = new RagdollBone(true);
+            boneB = new RagdollBone(true);
 
             ball = new BallJoint();
 
@@ -81,12 +81,6 @@ public class BallJointTest : MonoBehaviour
             {
                 ragdoll.add_constraint(stickConstraint);
             }
-            
-            /*
-            ragdoll.add_constraint(boneB.m_stick[0]);
-            ragdoll.add_constraint(boneB.m_stick[2]);
-            ragdoll.add_constraint(boneB.m_stick[4]);
-            */
         }
 
         {
@@ -105,12 +99,5 @@ public class BallJointTest : MonoBehaviour
         ragdoll.m_ragdoll_bones[0].add_force(new Vector3(0, -0.1f, 0), Time.deltaTime);
 
         ragdoll.run(gravity, Time.deltaTime);
-
-        /*
-        foreach (StickConstraint stick in ragdoll.m_ragdoll_bones[1].m_stick)
-        {
-            stick.satisfy();
-        }
-        */
     }
 }

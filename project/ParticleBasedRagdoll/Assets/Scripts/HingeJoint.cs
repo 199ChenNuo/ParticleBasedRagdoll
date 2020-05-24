@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HingeJoint : Joint
+public class HingeJoint : MyJoint
 {
     public RagdollBone m_A;
     public RagdollBone m_B;
@@ -39,7 +39,7 @@ public class HingeJoint : Joint
     public HingeJoint()
     {
         m_hinge_1 = m_hinge_2 = null;
-        m_choice = 2;
+        m_choice = 1;
     }
 
     public void init(RagdollBone A, RagdollBone B, Particle p1, Particle p2,
@@ -111,6 +111,9 @@ public class HingeJoint : Joint
         }
 
         {
+          
+            m_stick_neg = new StickConstraint();
+            m_stick_pos = new StickConstraint();
             m_stick_pos.init(m_pA_1, m_pB_1);
             m_stick_pos.SetRestLength((m_pos_point_1 - m_pA_1.position()).magnitude);
 
@@ -135,6 +138,9 @@ public class HingeJoint : Joint
             m_coords_wcs_to_bf.xform_point(h2);
             m_coords_wcs_to_bf.xform_point(pB);
 
+            m_plane_pos = new MyPlane();
+            m_plane_neg = new MyPlane();
+            m_plane_B = new MyPlane();
             m_plane_pos.set(h1, h2, m_pos_point_1);
             m_plane_neg.set(h1, h2, m_neg_point_1);
             m_plane_B.set(h1, h2, pB);
@@ -169,6 +175,7 @@ public class HingeJoint : Joint
         Vector3 pB = m_pB_1.position();
         m_coords_wcs_to_bf.xform_point(pB);
 
+        // TODO: bug
         if (m_plane_pos.get_signed_distance(pB) > 0 && m_plane_B.get_signed_distance(pB) > 0)
         {
             Vector3 new_pos_1 = m_pos_point_1;
@@ -199,11 +206,11 @@ public class HingeJoint : Joint
 
         if (m_plane_pos.get_signed_distance(pB) > 0 && m_plane_B.get_signed_distance(pB)>0)
         {
-            m_stick_pos.Satisfy();
+            m_stick_pos.satisfy();
         }
         else if(m_plane_neg.get_signed_distance(pB) < 0 && m_plane_B.get_signed_distance(pB) < 0)
         {
-            m_stick_neg.Satisfy();
+            m_stick_neg.satisfy();
         }
     }
 }

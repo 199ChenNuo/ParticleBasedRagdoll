@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StickConstraint : Joint
+public class StickConstraint : MyJoint
 {
     #region Prop
     public enum SatisfyChoice { HalfHalf = 0, SquareRoot = 1, MassInvolve = 2 };
@@ -15,8 +15,8 @@ public class StickConstraint : Joint
     #endregion
 
     #region PropFunc
-    public void SetBoneA(Particle b_A) { m_A = b_A; }
-    public void SetBoneB(Particle b_B) { m_B = b_B; }
+    public void set_particleA(Particle b_A) { m_A = b_A; }
+    public void set_particleB(Particle b_B) { m_B = b_B; }
     public void SetRestLength(float len) { m_length = len; }
     public void setname(string name) { m_name = name; }
     public string name() { return m_name; }
@@ -30,37 +30,15 @@ public class StickConstraint : Joint
         m_length_sqr = 0;
         m_choice = (SatisfyChoice)2;
     }
-    public void init(Particle b_A, Particle b_B, int choice = 2)
+    public void init(Particle b_A, Particle b_B, int choice = 0)
     {
-        /*
-        if (b_A != null)
-        {
-            SetBoneA(b_A);
-        }
-        else
-        {
-            Debug.Log("[Error]  particle A needed for stick constraint.., particle A:", b_A);
-            return;
-        }
-
-        if (b_B != null)
-        {
-            SetBoneB(b_B);
-        }
-        else
-        {
-            Debug.Log("[Error]  Particle B needed for stick constraint..");
-            return;
-        }
-        */
-
-        SetBoneA(b_A);
-        SetBoneB(b_B);
+        set_particleA(b_A);
+        set_particleB(b_B);
         SetRestLength((m_A.position() - m_B.position()).magnitude);
         m_choice = SatisfyChoice.HalfHalf;
     }
 
-    public void Satisfy()
+    public override void satisfy()
     {
         switch (m_choice)
         {
@@ -95,12 +73,11 @@ public class StickConstraint : Joint
         Vector3 delta = m_A.position() - m_B.position();
         float delta_length = delta.magnitude;
         float diff = 0.5f * (float)((delta_length - m_length) / delta_length);
-
         
+
         m_A.m_r -= diff * delta;
         m_B.m_r += diff * delta;
         
-       
     }
 
     /// <summary>
@@ -130,5 +107,5 @@ public class StickConstraint : Joint
 
 
 
-    
+
 }

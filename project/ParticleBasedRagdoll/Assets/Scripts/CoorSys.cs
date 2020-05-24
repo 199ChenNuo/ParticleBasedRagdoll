@@ -56,9 +56,10 @@ public class CoorSys
       * [p]_WCS = f(p)
       *
       */
-    public void xform_point(Vector3 p)
+    public Vector3 xform_point(Vector3 p)
     {
         p = m_T + m_Q * p;
+        return p;
     }
 
     /**

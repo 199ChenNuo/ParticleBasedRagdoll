@@ -28,11 +28,19 @@ public class Particle
     }
 
     public Vector3 position() { return m_r; }
+    public Vector3 init_position() { return m_init_r; }
     public void set_position(Vector3 r) { m_r = r; }
     public void set_position(float x, float y, float z) { m_r = new Vector3(x, y, z); }
 
     public float mass() { return m_mass; }
     public void set_mass(float mass) { m_mass = mass; m_inv_mass = 1 / m_mass; }
+
+    public void init(Vector3 position)
+    {
+        m_r = position;
+        m_init_r = position;
+        m_old_r = position;
+    }
 
     public void bind(Vector3 r)
     {

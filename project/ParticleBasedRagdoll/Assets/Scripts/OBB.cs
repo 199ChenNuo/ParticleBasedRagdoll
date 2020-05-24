@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OBB
 {
-    public GameObject m_cube;
+    // public GameObject m_cube;
     public Vector3 center;
 
     // The location of this oriented bounding boxs center.
@@ -16,7 +16,7 @@ public class OBB
     // The extents and the collision develope along this oriented bounding boxs axis.
     public Vector3 m_eps;
 
-    public GameObject cube() { return m_cube; }
+    // public GameObject cube() { return m_cube; }
 
     public OBB()
     {
@@ -24,7 +24,7 @@ public class OBB
         m_R = new Quaternion(0, 0, 0, 1);
         m_ext = m_eps = new Vector3(0.5f, 0.5f, 0.5f);
 
-        m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        // m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         /// if added rigid body, m_cube will fall (unity built-in beheviour)
         // m_cube.AddComponent<Rigidbody>();
     }
@@ -38,7 +38,7 @@ public class OBB
     public void set_center(Vector3 c)
     {
         center = c;
-        m_cube.transform.position = center;
+        // m_cube.transform.position = center;
     }
 
     public void set_orientation(float[][] r)
@@ -51,15 +51,17 @@ public class OBB
         // TODO: implement
         
         Debug.Log("Modify Cube Scale");
-        m_cube.transform.localScale = new Vector3(width, hight, depth);
+        // m_cube.transform.localScale = new Vector3(width, hight, depth);
     }
 
     // TODO: replace Quaternion with Matrix 3x3
     public void init(Vector3 T, Quaternion R, float width, float hight, float depth)
     {
+        /*
         m_cube.transform.position = T;
         m_cube.transform.rotation = R;
         m_cube.transform.localScale = new Vector3(width, hight, depth);
+        */
     }
 
     

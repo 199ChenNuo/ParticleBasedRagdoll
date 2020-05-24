@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Joint
+public class MyJoint
 {
     public virtual void satisfy()
     {
@@ -10,9 +10,11 @@ public class Joint
         // Debug.Log("Joint@satisfy()");
     }
 
+    /*
     public virtual void init(RagdollBone boneA, RagdollBone boneB)
     {
         // Base class function.
         // Debug.Log("Joint@init()");
     }
+    */
 }
