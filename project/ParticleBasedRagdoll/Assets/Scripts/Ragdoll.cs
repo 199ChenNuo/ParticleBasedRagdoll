@@ -8,7 +8,7 @@ public class Ragdoll
     public List<BallJoint> m_ball_joints;
     public List<HingeJoint> m_hinge_joints;
     public List<StickConstraint> m_stick_constraints;
-    public int m_itertaion = 3;
+    public int m_itertaion = 5;
 
     public float m_friction;
 

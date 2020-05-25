@@ -28,6 +28,7 @@ public class Particle
     }
 
     public Vector3 position() { return m_r; }
+    public void set_init_position(Vector3 r) { m_init_r  = r; }
     public Vector3 init_position() { return m_init_r; }
     public void set_position(Vector3 r) { m_r = r; }
     public void set_position(float x, float y, float z) { m_r = new Vector3(x, y, z); }

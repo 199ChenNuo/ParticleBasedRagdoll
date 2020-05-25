@@ -9,6 +9,8 @@ public class RagdollBone:MonoBehaviour
     public Particle m_C;
     public Particle m_D;
 
+    public bool visualiza_particle;
+    public LineRenderer line;
     public GameObject gb_a;
     public GameObject gb_b;
     public GameObject gb_c;
@@ -20,12 +22,9 @@ public class RagdollBone:MonoBehaviour
     public string Name() { return m_name; }
     public void setname(string name) { m_name = name; }
 
-    LineRenderer line;
-
-    public bool visualiza_particle;
-
     public Ragdoll m_owner;
     public List<StickConstraint> m_stick = new List<StickConstraint>(new StickConstraint[6]);
+
 
     public Vector3 m_coord_T;
     // TODO: replace Quaternion with Matrix 3x3
@@ -34,11 +33,11 @@ public class RagdollBone:MonoBehaviour
     public CoorSys m_coords_wcs_to_bf;
     public CoorSys m_coords_bf_to_wcs;
 
-    // public OBB m_obb;
+    // the positio of cube in BF
+    public Vector3 m_cube_pos_BF;
     public GameObject m_cube;
-
-    public Vector3 m_center;
     public Color m_color;
+
 
     public List<RagdollBone> m_ragdoll_bones;
 
@@ -50,7 +49,6 @@ public class RagdollBone:MonoBehaviour
     public Particle ParticleC() { return m_C; }
     public Particle ParticleD() { return m_D; }
 
-    // public OBB get_OBB() { return m_obb; }
     public GameObject cube() { return m_cube; }
 
     public void add_force(Vector3 force, float delta_t)
@@ -59,8 +57,6 @@ public class RagdollBone:MonoBehaviour
         m_B.add_force(force, delta_t);
         m_C.add_force(force, delta_t);
         m_D.add_force(force, delta_t);
-
-        // set_obb_center_wcs();
     }
 
     public void connect(Ragdoll owner)
@@ -72,19 +68,11 @@ public class RagdollBone:MonoBehaviour
         m_owner = null;
     }
 
-    /*
-    public OBB get_obb_in_WCS()
-    {
-        OBB tmp = m_obb;
-        tmp.xform(m_coord_T, m_coord_R);
-        return tmp;
-    }
-    */
-
     public Vector3 position()
     {
-        // return get_obb_in_WCS().center;
-        return m_cube.transform.position;
+        Vector3 cube_pos_wcs = m_cube_pos_BF;
+        m_coords_bf_to_wcs.xform_point(cube_pos_wcs);
+        return cube_pos_wcs;
     }
 
     public void connect(RagdollBone bone)
@@ -99,6 +87,12 @@ public class RagdollBone:MonoBehaviour
     {
         return m_ragdoll_bones.Contains(bone);
     }
+
+    public void set_color(Color color)
+    {
+        m_color = color;
+    }
+
 
     public RagdollBone(bool visualize = false)
     {
@@ -132,25 +126,19 @@ public class RagdollBone:MonoBehaviour
         }
     }
 
-    void set_position()
+    public void update_position()
     {
-        // TODO: find out why boneB in BallJointTest won't move
-        /*
-        if (m_name == "boneB")
+        if (isFixed)
         {
-            for (int i = 0; i < 3; ++i)
-            {
-                foreach (StickConstraint stick in m_stick)
-                {
-                    Debug.Log("================" + stick.name() + "===============");
-                    Debug.Log(stick.m_length);
-                    Debug.Log((stick.m_A.position() - stick.m_B.position()).magnitude);
-                    stick.satisfy();
-                }
-            }
+            m_A.set_position(m_A.init_position());
+            m_B.set_position(m_B.init_position());
+            m_C.set_position(m_C.init_position());
+            m_D.set_position(m_D.init_position());
         }
-        */
 
+
+
+        update_coordsys();
         if (visualiza_particle)
         {
             gb_a.transform.position = m_A.position();
@@ -176,37 +164,45 @@ public class RagdollBone:MonoBehaviour
 #pragma warning restore CS0618 // 类型或成员已过时
         }
 
-        m_cube.transform.position = (m_A.position() + m_B.position() + m_C.position() + m_D.position()) / 4;
+        set_cube_position();
     }
 
-    public void set_visualize_particle(bool flag)
+    public void set_cube_position()
     {
-        visualiza_particle = flag;
+        Vector3 cube_pos_wcs = m_cube_pos_BF;
 
+        cube_pos_wcs = m_coords_bf_to_wcs.xform_point(cube_pos_wcs);
+        
+        m_cube.transform.position = cube_pos_wcs;
+        m_cube.transform.rotation = m_coords_wcs_to_bf.Q();
     }
 
-    public void draw_particle()
+    public void update_coordsys()
     {
+        Vector3 BF_x = (m_B.position() - m_A.position()).normalized;
+        Vector3 BF_z = Vector3.Cross(BF_x, m_D.position() - m_A.position()).normalized;
+        Vector3 BF_y = -Vector3.Cross(BF_z, BF_x);
 
-
-    }
-
-    public void update_position()
-    {
-        if (isFixed)
+        float[][] tmp_T =
         {
-            m_A.set_position(m_A.init_position());
-            m_B.set_position(m_B.init_position());
-            m_C.set_position(m_C.init_position());
-            m_D.set_position(m_D.init_position());
-        }
-            set_position();
-      
+            new float[3],
+            new float[3],
+            new float[3]
+        };
+        tmp_T = Utils.Vector3s2Matrix(BF_x, BF_y, BF_z);
+
+        m_coords_wcs_to_bf = new CoorSys(m_A.position(), Utils.Matrix3x3ToQuaternion(tmp_T));
+        m_coords_bf_to_wcs = m_coords_wcs_to_bf.inverse();
     }
 
     public void set_fixed(bool fix)
     {
         isFixed = fix;
+    }
+
+    public void set_cube_pos(Vector3 pos)
+    {
+        m_cube_pos_BF = pos;
     }
 
     public void init(Ragdoll owner, Particle A, Particle B, Particle C, Particle D, string name = "bone")
@@ -255,99 +251,27 @@ public class RagdollBone:MonoBehaviour
 
         update_coordsys();
 
-
-        float line1 = (A.position() - B.position()).magnitude;
-
         Vector3 vec1 = C.position() - A.position();
         Vector3 vec2 = B.position() - A.position();
-        Vector3 vecProj = Vector3.Project(vec1, vec2);
-        float line2 = Mathf.Sqrt(Mathf.Pow(Vector3.Magnitude(vec1), 2) - Mathf.Pow(Vector3.Magnitude(vecProj), 2));
-
-
         Vector3 vec3 = D.position() - A.position();
-
-        // float line3 = Vector3.Project(Vector3.Cross(vec1, vec2), vec3).magnitude;
         Plane tmp_plane = new Plane(A.position(), B.position(), C.position());
-        float line3 = tmp_plane.GetDistanceToPoint(D.position());
 
         float A_to_B = vec2.magnitude;
         float A_to_C = vec1.magnitude;
         float A_to_D = vec3.magnitude;
 
         m_mass = A_to_B * A_to_C * A_to_D;
-
-        // m_obb = new OBB();
+        
         m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
-        m_center = (A.position() + B.position() + C.position() + D.position()) / 4;
-        Debug.Log(m_name + m_center.ToString());
-        m_coords_wcs_to_bf.xform_point(m_center);
-        m_cube.transform.position = m_center;
-        m_cube.transform.localScale = new Vector3(line1, line3, line2);
-        m_cube.name = m_name;
-
-        // TODO: replace Quaternion with Matrix 3x3
-        // Quaternion r = new Quaternion(0, 0, 0, 1);
-        // m_obb.init(m_center, r, line1, line3, line2);
     }
 
-    void set_coord()
+    public void set_obb_size(Vector3 size)
     {
-        m_coords_wcs_to_bf = new CoorSys(m_coord_T, m_coord_R);
-        m_coords_bf_to_wcs = m_coords_wcs_to_bf.inverse();
+        // TODO: implement
     }
 
-    public void update_coordsys()
+    public void set_obb_size(float x, float y, float z)
     {
-        Vector3 X = (m_B.position() - m_A.position()).normalized;
-        Vector3 Z = (Utils.module(X, m_D.position())).normalized;
-        Vector3 Y = (Utils.module(Z, X));
-
-        float[][] tmp_r =
-        {
-            new float[3],
-            new float[3],
-            new float[3]
-        };
-        tmp_r[0][0] = X.x;
-        tmp_r[0][1] = X.y;
-        tmp_r[0][2] = X.z;
-        tmp_r[1][0] = Y.x;
-        tmp_r[1][1] = Y.y;
-        tmp_r[1][2] = Y.z;
-        tmp_r[1][0] = Y.x;
-        tmp_r[2][0] = Z.x;
-        tmp_r[2][1] = Z.y;
-        tmp_r[2][2] = Z.z;
-
-        m_coord_R = Utils.Matrix3x3ToQuaternion(tmp_r);
-
-        m_coord_T = m_A.position();
-        m_coords_wcs_to_bf = new CoorSys(m_coord_T, m_coord_R);
-        m_coords_bf_to_wcs = m_coords_wcs_to_bf.inverse();
-    }
-
-    public void set_obb_size(float width, float hight, float depth)
-    {
-        // m_obb.init(width, hight, depth);
-        m_cube.transform.localScale = new Vector3(width, hight, depth);
-        m_mass = width * hight * depth;
-    }
-
-    public void set_obb_center_wcs()
-    {
-        Vector3 center = (m_A.position() + m_B.position() + m_C.position() + m_D.position()) / 4;
-        // m_coords_wcs_to_bf.xform_point(center);
-        // m_obb.set_center(center);
-        m_cube.transform.position = center;
-    }
-
-    public void set_obb_orientation_wcs(float[][] ori)
-    {
-        float[][] r = ori;
-        m_coords_wcs_to_bf.xform_matrix(r);
-        // m_obb.set_orientation(r);
-        Quaternion q_r = Utils.Matrix3x3ToQuaternion(r);
-        m_cube.transform.rotation = q_r;
+        set_obb_size(new Vector3(x, y, z));
     }
 }

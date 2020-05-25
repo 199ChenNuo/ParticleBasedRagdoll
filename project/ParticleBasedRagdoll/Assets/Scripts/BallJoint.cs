@@ -10,26 +10,36 @@ public class BallJoint : MyJoint
     public CoorSys m_coords_wcs_to_bf;
     public CoorSys m_coords_bf_to_wcs;    
 
+    /// <summary>
+    /// the particle that is shared between boneA and boneB in ball joint
+    /// </summary>
     public Particle m_ball_particle;
-    public Particle m_pA;
-    public Particle m_pB;
+    /// <summary>
+    /// the particle in boneA to correct ball joint violation
+    /// </summary>
     public Particle m_pA_1;
+    /// <summary>
+    /// the particle in boneB to detect wether ball joint is violated
+    /// </summary>
     public Particle m_pB_ref;
 
+    /// <summary>
+    ///     angle limit for ball joint
+    /// </summary>
     public double m_angle_limit;
-
-    public MyPlane m_plane;
 
     public StickConstraint m_stick_ref;
 
     public float m_min_length_ref;
+
+    public Vector3 m_plane_normal_BF;
 
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="A">Bone A</param>
-    /// <param name="B">Bone N</param>
+    /// <param name="B">Bone B</param>
     /// <param name="p">The shared ball particle</param>
     /// <param name="ref_p">he reference particle used to detect and correct breaches(in  bone B)</param>
     /// <param name="angle">The angle from the plane to the cone, Defines the width of the  reach cone</param>
@@ -41,8 +51,8 @@ public class BallJoint : MyJoint
             m_A = A;
             m_B = B;
 
-            m_coords_wcs_to_bf = new CoorSys(m_A.m_coord_T, m_A.m_coord_R);
-            m_coords_bf_to_wcs = m_coords_wcs_to_bf.inverse();
+            m_coords_bf_to_wcs = m_A.m_coords_bf_to_wcs;
+            m_coords_wcs_to_bf = m_A.m_coords_wcs_to_bf;
         }
 
         {
@@ -55,37 +65,30 @@ public class BallJoint : MyJoint
             m_stick_ref.init(m_pA_1, m_pB_ref);
         }
 
-        {
-            m_plane = new MyPlane();
+        {   
+            m_plane_normal_BF = plane_normal;
+            m_coords_wcs_to_bf.xform_vector(m_plane_normal_BF);
             
-            Vector3 plane_point_BF = m_ball_particle.position();
-            m_coords_wcs_to_bf.xform_point(plane_point_BF);
-            Vector3 plane_nornal_BF = plane_normal;
-            m_coords_wcs_to_bf.xform_vector(plane_nornal_BF);
-
-            m_plane.set(plane_normal, m_ball_particle.position());
-
-            m_min_length_ref = Mathf.Abs(Mathf.Sin((Mathf.PI / 2) - angle) * (m_pB_ref.position() - m_ball_particle.position()).magnitude);
+            m_min_length_ref = Vector3.Project(m_pB_ref.position() - m_ball_particle.position(), plane_normal).magnitude;
         }
     }
 
     public override void satisfy()
     {
+        m_coords_bf_to_wcs = m_A.m_coords_bf_to_wcs;
+        m_coords_wcs_to_bf = m_A.m_coords_wcs_to_bf;
 
-        m_coords_bf_to_wcs = new CoorSys(m_A.m_coord_T, m_A.m_coord_R);
-        m_coords_wcs_to_bf = m_coords_bf_to_wcs.inverse();
+        Vector3 plane_normal_WCS = m_plane_normal_BF;
+        m_coords_bf_to_wcs.xform_vector(plane_normal_WCS);
 
-        Vector3 p = m_pB_ref.position();
-        m_coords_wcs_to_bf.xform_point(p);
+        float current_angle = Vector3.Angle(m_pB_ref.position() - m_ball_particle.position(), plane_normal_WCS);
+        Debug.Log(plane_normal_WCS);
 
-        double dist = m_plane.get_signed_distance(p);
-
-        if (dist < m_min_length_ref)
+        if (Mathf.Abs(current_angle) > m_angle_limit)
         {
-            m_stick_ref.SetRestLength((m_pB_ref.position()- m_pA_1.position()).magnitude + (float)(m_min_length_ref - dist));
+            float current_dist = Vector3.Project(m_pB_ref.position() - m_ball_particle.position(), plane_normal_WCS).magnitude;
+            m_stick_ref.SetRestLength((m_pB_ref.position() - m_pA_1.position()).magnitude + (m_min_length_ref - current_dist));
             m_stick_ref.satisfy();
-            m_A.set_obb_center_wcs();
-            m_B.set_obb_center_wcs();
         }
     }
 }

@@ -74,12 +74,12 @@ public class BallJointTest : MonoBehaviour
 
             foreach (StickConstraint stickConstraint in boneA.m_stick)
             {
-                ragdoll.add_constraint(stickConstraint);
+                // ragdoll.add_constraint(stickConstraint);
             }
             
             foreach (StickConstraint stickConstraint in boneB.m_stick)
             {
-                ragdoll.add_constraint(stickConstraint);
+                // ragdoll.add_constraint(stickConstraint);
             }
         }
 
