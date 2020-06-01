@@ -5,6 +5,8 @@ using UnityEngine;
 public class PhysicsManager : MonoBehaviour
 {
     public Vector3 gravity = new Vector3(0, -9.8f, 0);
+    [Range (0, 1)]
+    public float Damping = 1.0f;
     public Ragdoll ragdoll;
 
     // Start is called before the first frame update

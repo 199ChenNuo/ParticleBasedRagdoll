@@ -55,13 +55,18 @@ public class TestBallJoint2 : MonoBehaviour
         B3.set_init_position(new Vector3(8, 0, 0));
 
 
-        boneA.init(ragdoll, A1, A2, A3, A4, "fixed_bone");
+        boneA.init(ragdoll, A1, A4, A3, A2, "fixed_bone");
         boneA.set_fixed(true);
         boneA.set_color(Color.blue);
-        boneB.init(ragdoll, A4, B1, B2, B3, "moving_bone");
-        boneB.set_color(Color.red);
+        boneA.set_size(new Vector3(4, 2, 2));
+        boneA.set_cube_pos(new Vector3(1.5f, 0, 1.5f));
 
-        ball.init(boneA, boneB, A4, B3, 10, new Vector3(1, 0, 0));
+        boneB.init(ragdoll, B3, A4, B2, B1, "moving_bone");
+        boneB.set_color(Color.red);
+        boneB.set_size(new Vector3(5.5f, 2, 2));
+        boneB.set_cube_pos(new Vector3(0.5f, 0, 0));
+
+        ball.init(boneA, boneB, A4, B3, 1, new Vector3(1, 0, 0));
 
         ragdoll.add_ragdoll_bone(boneA);
         ragdoll.add_ragdoll_bone(boneB);
@@ -71,7 +76,7 @@ public class TestBallJoint2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ragdoll.run(new Vector3(0, -9.8f, 0), 0.01f);
+        ragdoll.run(new Vector3(0, -9.8f, 0), 0.025f);
 
         // Debug.Log((boneB.m_C.position() - boneB.m_A.position()).magnitude.ToString());
     }

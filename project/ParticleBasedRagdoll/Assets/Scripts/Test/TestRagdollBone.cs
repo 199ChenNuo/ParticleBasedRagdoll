@@ -6,6 +6,8 @@ public class TestRagdollBone : MonoBehaviour
 {
     public Ragdoll ragdoll;
 
+    public Vector3 cube_position;
+
     Particle A1;
     Particle A2;
     Particle A3;
@@ -21,16 +23,17 @@ public class TestRagdollBone : MonoBehaviour
         A3 = new Particle();
         A4 = new Particle();
 
-        boneA = new RagdollBone(false);
+        boneA = new RagdollBone(true);
 
         ragdoll = new Ragdoll();
 
-        A1.set_position(1, 0, 1);
+        A1.set_position(1, 1, 1);
         A2.set_position(-1, 0, 1);
         A3.set_position(1, 0, -1);
         A4.set_position(-1, 0, -1);
 
         boneA.init(ragdoll, A1, A2, A3, A4);
+        
         // boneA.m_obb.m_cube.name = "flat bone";
 
         ragdoll.add_ragdoll_bone(boneA);
@@ -39,6 +42,7 @@ public class TestRagdollBone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        boneA.set_cube_pos(cube_position);
         // set gracity to 0 for observation
         ragdoll.run(new Vector3(0, 0, 0), Time.deltaTime);
     }

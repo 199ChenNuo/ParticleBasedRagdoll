@@ -89,7 +89,7 @@ public class StickConstraint : MyJoint
         float delta_sqr = delta.sqrMagnitude;
         float approx = (float)m_length_sqr / (float)(delta_sqr + m_length_sqr) - 0.5f;
         delta *= approx;
-        Debug.Log(approx);
+        // Debug.Log(approx);
         m_A.m_r += delta;
         m_B.m_r -= delta;
     }

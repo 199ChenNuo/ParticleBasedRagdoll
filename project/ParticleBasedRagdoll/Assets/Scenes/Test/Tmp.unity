@@ -220,9 +220,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 761684725}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfcec4945af6216418224765913ac89f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d096007601386f4f8030416e9e6ef1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gravity: {x: 0, y: -9, z: 0}
+  posA: {x: 0, y: 0, z: 0}
+  posB: {x: 2, y: 0, z: 0}
+  boneB: {fileID: 0}
 --- !u!4 &761684727
 Transform:
   m_ObjectHideFlags: 0

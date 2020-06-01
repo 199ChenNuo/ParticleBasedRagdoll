@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RagdollBone:MonoBehaviour
+public class RagdollBone : MonoBehaviour
 {
     public Particle m_A;
     public Particle m_B;
@@ -11,6 +11,9 @@ public class RagdollBone:MonoBehaviour
 
     public bool visualiza_particle;
     public LineRenderer line;
+    public LineRenderer xline;
+    public LineRenderer yline;
+    public LineRenderer zline;
     public GameObject gb_a;
     public GameObject gb_b;
     public GameObject gb_c;
@@ -91,6 +94,12 @@ public class RagdollBone:MonoBehaviour
     public void set_color(Color color)
     {
         m_color = color;
+        m_cube.GetComponent<MeshRenderer>().material.color = color;
+    }
+
+    public void set_size(Vector3 size)
+    {
+        m_cube.transform.localScale = size;
     }
 
 
@@ -123,6 +132,12 @@ public class RagdollBone:MonoBehaviour
 
             line = gb_a.AddComponent<LineRenderer>();
             line.material = Resources.Load<Material>("Materials/AlphaMaterial");
+            xline = gb_b.AddComponent<LineRenderer>();
+            xline.material = Resources.Load<Material>("Materials/x-axis");
+            yline = gb_c.AddComponent<LineRenderer>();
+            yline.material = Resources.Load<Material>("Materials/y-axis");
+            zline = gb_d.AddComponent<LineRenderer>();
+            zline.material = Resources.Load<Material>("Materials/z-axis");
         }
     }
 
@@ -148,7 +163,7 @@ public class RagdollBone:MonoBehaviour
 
 
 #pragma warning disable CS0618 // 类型或成员已过时
-            line.SetVertexCount(9);
+            line.SetVertexCount(8);
 #pragma warning restore CS0618 // 类型或成员已过时
             line.SetPosition(0, m_A.position());
             line.SetPosition(1, m_B.position());
@@ -164,24 +179,54 @@ public class RagdollBone:MonoBehaviour
 #pragma warning restore CS0618 // 类型或成员已过时
         }
 
-        set_cube_position();
+        update_cube_position();
     }
 
-    public void set_cube_position()
+    private void update_cube_position()
     {
+        Vector3 BF_x = (m_B.position() - m_A.position()).normalized;
+        Vector3 BF_z = Vector3.Cross(BF_x, m_D.position() - m_A.position()).normalized;
+        Vector3 BF_y = Vector3.Cross(BF_z, BF_x);
+        /*
         Vector3 cube_pos_wcs = m_cube_pos_BF;
-
         cube_pos_wcs = m_coords_bf_to_wcs.xform_point(cube_pos_wcs);
-        
-        m_cube.transform.position = cube_pos_wcs;
-        m_cube.transform.rotation = m_coords_wcs_to_bf.Q();
+        */
+        // m_cube.transform.position = cube_pos_wcs;
+        m_cube.transform.position = m_A.position()
+            + m_cube_pos_BF.x * BF_x
+            + m_cube_pos_BF.y * BF_y
+            + m_cube_pos_BF.z * BF_z;
+        // m_cube.transform.rotation = m_coords_wcs_to_bf.Q();
+        m_cube.transform.rotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), m_B.position() - m_A.position());
     }
 
     public void update_coordsys()
     {
         Vector3 BF_x = (m_B.position() - m_A.position()).normalized;
         Vector3 BF_z = Vector3.Cross(BF_x, m_D.position() - m_A.position()).normalized;
-        Vector3 BF_y = -Vector3.Cross(BF_z, BF_x);
+        Vector3 BF_y = Vector3.Cross(BF_z, BF_x);
+
+        if (visualiza_particle)
+        {
+#pragma warning disable CS0618 // 类型或成员已过时
+            xline.SetWidth(0.1f, 0.01f);
+            // xline.SetColors(Color.red, Color.red);
+            xline.SetVertexCount(2);
+            yline.SetWidth(0.1f, 0.01f);
+            // yline.SetColors(Color.yellow, Color.yellow);
+            yline.SetVertexCount(2);
+            zline.SetWidth(0.1f, 0.01f);
+            // zline.SetColors(Color.green, Color.green);
+            zline.SetVertexCount(2);
+#pragma warning restore CS0618 // 类型或成员已过时
+            xline.SetPosition(0, m_A.position());
+            xline.SetPosition(1, m_A.position() + 2 * BF_x);
+            yline.SetPosition(0, m_A.position());
+            yline.SetPosition(1, m_A.position() + 2 * BF_y);
+            zline.SetPosition(0, m_A.position());
+            zline.SetPosition(1, m_A.position() + 2 * BF_z);
+        }
+
 
         float[][] tmp_T =
         {
@@ -261,7 +306,7 @@ public class RagdollBone:MonoBehaviour
         float A_to_D = vec3.magnitude;
 
         m_mass = A_to_B * A_to_C * A_to_D;
-        
+
         m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
     }
 

@@ -7,6 +7,8 @@ public class Ragdoll
     public List<RagdollBone> m_ragdoll_bones;
     public List<BallJoint> m_ball_joints;
     public List<HingeJoint> m_hinge_joints;
+
+    public List<MyHingeJoint> m_my_hinge_joint;
     public List<StickConstraint> m_stick_constraints;
     public int m_itertaion = 5;
 
@@ -17,6 +19,11 @@ public class Ragdoll
         // TODO: atomatice add stick constraint in bone to ragdoll
         bone.connect(this);
         m_ragdoll_bones.Add(bone);
+
+        for(int i=0; i < bone.m_stick.Count; ++i)
+        {
+            m_stick_constraints.Add(bone.m_stick[i]);
+        }
     }
 
     public void remove_ragdoll_bone(RagdollBone bone)
@@ -31,7 +38,9 @@ public class Ragdoll
         m_ragdoll_bones = new List<RagdollBone>();
         m_ball_joints = new List<BallJoint>();
         m_hinge_joints = new List<HingeJoint>();
-        m_stick_constraints = new List<StickConstraint>(); 
+        m_stick_constraints = new List<StickConstraint>();
+
+        m_my_hinge_joint = new List<MyHingeJoint>();
     }
 
     public void clear()
@@ -42,6 +51,11 @@ public class Ragdoll
     public void add_constraint(BallJoint joint)
     {
         m_ball_joints.Add(joint);
+    }
+
+    public void add_constraint(MyHingeJoint joint)
+    {
+        m_my_hinge_joint.Add(joint);
     }
 
     public void add_constraint(HingeJoint hinge)
@@ -80,6 +94,10 @@ public class Ragdoll
             {
                 hinge.satisfy();
             }
+            foreach (MyHingeJoint jo in m_my_hinge_joint)
+            {
+                jo.satisfy();
+            }
             foreach(StickConstraint stickConstraint in m_stick_constraints)
             {
                 stickConstraint.satisfy();
@@ -95,9 +113,9 @@ public class Ragdoll
 
     void collision_detection()
     {
-        int collisions = 0;
+        // int collisions = 0;
         Vector3[] collision_points = new Vector3[16];
-        Vector3 n;
+        // Vector3 n;
         float[] disconnect = new float[16];
 
         for (int i = 0; i < m_ragdoll_bones.Count; ++i)

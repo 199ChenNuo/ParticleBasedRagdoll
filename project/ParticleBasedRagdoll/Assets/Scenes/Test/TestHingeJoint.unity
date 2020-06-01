@@ -142,9 +142,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: {x: 0, y: 0, z: 0}
+  posA: {x: 3, y: 0, z: 0}
+  posB: {x: 2, y: 0, z: 2}
   boneA: {fileID: 0}
   boneB: {fileID: 0}
-  ground: {fileID: 0}
 --- !u!4 &20575218
 Transform:
   m_ObjectHideFlags: 0

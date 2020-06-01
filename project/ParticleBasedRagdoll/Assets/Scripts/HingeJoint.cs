@@ -45,6 +45,16 @@ public class HingeJoint : MyJoint
     public void init(RagdollBone A, RagdollBone B, Particle p1, Particle p2,
         float pos_angle, float neg_angle)
     {
+        if (A.isFixed == true && pos_angle == 0 && neg_angle == 0)
+        {
+            B.isFixed = true;
+            // return;
+        }
+        if (B.isFixed == true && pos_angle == 0 && neg_angle == 0)
+        {
+            A.isFixed = true;
+            // return;
+        }
         {
             m_A = A;
             m_B = B;

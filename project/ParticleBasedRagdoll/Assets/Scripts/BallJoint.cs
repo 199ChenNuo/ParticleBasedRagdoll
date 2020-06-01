@@ -82,7 +82,6 @@ public class BallJoint : MyJoint
         m_coords_bf_to_wcs.xform_vector(plane_normal_WCS);
 
         float current_angle = Vector3.Angle(m_pB_ref.position() - m_ball_particle.position(), plane_normal_WCS);
-        Debug.Log(plane_normal_WCS);
 
         if (Mathf.Abs(current_angle) > m_angle_limit)
         {

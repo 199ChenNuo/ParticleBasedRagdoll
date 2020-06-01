@@ -7,6 +7,9 @@ public class TestHingeJoint : MonoBehaviour
     public Vector3 gravity = new Vector3(0, 0, 0);
     public Ragdoll ragdoll;
 
+    public Vector3 posA;
+    public Vector3 posB;
+
     public Particle A;
     public Particle B;
     public Particle C;
@@ -21,7 +24,7 @@ public class TestHingeJoint : MonoBehaviour
     public HingeJoint hinge;
 
 
-    public GameObject ground;
+    // public GameObject ground;
 
     // Start is called before the first frame update
     void Start()
@@ -43,54 +46,41 @@ public class TestHingeJoint : MonoBehaviour
         }
 
         {
-            A.init(new Vector3(-3, 0, 3));
-            B.init(new Vector3(-3, 0, -3));
-            C.init(new Vector3(0, 6, 0));
-            D.init(new Vector3(0, 0, 0));
-            E.init(new Vector3(3, 0, 3));
-            F.init(new Vector3(3, 0, -3));
+            A.init(new Vector3(0, 0, 0));
+            B.init(new Vector3(6, 0, -4));
+            C.init(new Vector3(6, 0, 4));
+            D.init(new Vector3(12, 0, 0));
+            E.init(new Vector3(3, 3, 0));
+            F.init(new Vector3(9, 3, 0));
         }
 
         {
-            boneA.init(ragdoll, A, B, C, D, "boneA");
+            boneA.init(ragdoll, A, B, C, E, "boneA");
             boneA.set_fixed(true);
-            boneB.init(ragdoll, E, F, C, D, "boneB");
+            boneA.set_color(Color.blue);
+            boneA.set_cube_pos(posA);
+            boneA.set_size(new Vector3(2, 2, 2));
 
-            boneA.set_obb_size(1, 1, 1);
-            boneB.set_obb_size(1, 1, 1);
+            boneB.init(ragdoll, B, C, D, F, "boneB");
+            boneB.set_color(Color.red);
+            boneB.set_cube_pos(posB);
+            boneB.set_size(new Vector3(2, 2, 2));
         }
 
         {
             ragdoll.add_constraint(hinge);
             ragdoll.add_ragdoll_bone(boneA);
             ragdoll.add_ragdoll_bone(boneB);
-
-            foreach (StickConstraint stickConstraint in boneA.m_stick)
-            {
-                // ragdoll.add_constraint(stickConstraint);
-            }
-
-            foreach (StickConstraint stickConstraint in boneB.m_stick)
-            {
-                // ragdoll.add_constraint(stickConstraint);
-            }
         }
 
         {
-            hinge.init(boneA, boneB, C, D, 60, 60);
+            hinge.init(boneA, boneB, B, C, 60, 60);
         }
-
-        ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        ground.transform.position = new Vector3(0, -10, 0);
-        ground.transform.localScale = new Vector3(20, 1, 20);
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        ragdoll.m_ragdoll_bones[1].add_force(new Vector3(0, -0.1f, 0), Time.deltaTime);
-
-        ragdoll.run(gravity, Time.deltaTime);
+         ragdoll.run(gravity, 0.01f);
     }
 }
