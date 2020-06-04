@@ -54,13 +54,13 @@ public class TestHinge2 : MonoBehaviour
         ragdoll.add_ragdoll_bone(boneB);
 
         hinge = new MyHingeJoint();
-        hinge.init(boneA, boneB, B, C, 30, 30);
+        hinge.init(boneA, boneB, B, C, 100, 100);
         ragdoll.add_constraint(hinge);
     }
 
     // Update is called once per frame
     void Update()
     {
-        ragdoll.run(new Vector3(0, -9, 0), Time.deltaTime);
+        ragdoll.run(new Vector3(0, -9, 0), 0.01f);
     }
 }

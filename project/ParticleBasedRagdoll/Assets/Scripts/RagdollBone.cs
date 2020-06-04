@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RagdollBone : MonoBehaviour
+public class RagdollBone
 {
     public Particle m_A;
     public Particle m_B;
@@ -10,14 +10,14 @@ public class RagdollBone : MonoBehaviour
     public Particle m_D;
 
     public bool visualiza_particle;
-    public LineRenderer line;
-    public LineRenderer xline;
-    public LineRenderer yline;
-    public LineRenderer zline;
-    public GameObject gb_a;
-    public GameObject gb_b;
-    public GameObject gb_c;
-    public GameObject gb_d;
+     LineRenderer line;
+     LineRenderer xline;
+     LineRenderer yline;
+     LineRenderer zline;
+     GameObject gb_a;
+     GameObject gb_b;
+     GameObject gb_c;
+     GameObject gb_d;
 
     public bool isFixed;
 
@@ -40,6 +40,9 @@ public class RagdollBone : MonoBehaviour
     public Vector3 m_cube_pos_BF;
     public GameObject m_cube;
     public Color m_color;
+    float cube_x_rot;
+    float cube_y_rot;
+    float cube_z_rot;
 
 
     public List<RagdollBone> m_ragdoll_bones;
@@ -97,9 +100,24 @@ public class RagdollBone : MonoBehaviour
         m_cube.GetComponent<MeshRenderer>().material.color = color;
     }
 
+    public void set_cube_size(float x, float y, float z, float scale)
+    {
+        set_size(new Vector3(x, y, z) * scale);
+    }
+    public void set_cube_size(float x, float y, float z)
+    {
+        set_size(new Vector3(x, y, z));
+    }
     public void set_size(Vector3 size)
     {
         m_cube.transform.localScale = size;
+    }
+
+    public void set_cube_rot(float x_rot, float y_rot, float z_rot)
+    {
+        cube_x_rot = x_rot;
+        cube_y_rot = y_rot;
+        cube_z_rot = z_rot;
     }
 
 
@@ -112,6 +130,11 @@ public class RagdollBone : MonoBehaviour
         m_mass = 1;
         m_ragdoll_bones = new List<RagdollBone>();
         visualiza_particle = visualize;
+
+        m_cube_pos_BF = Vector3.zero;
+        cube_x_rot = 0;
+        cube_y_rot = 0;
+        cube_z_rot = 0;
 
         if (visualiza_particle)
         {
@@ -197,8 +220,16 @@ public class RagdollBone : MonoBehaviour
             + m_cube_pos_BF.y * BF_y
             + m_cube_pos_BF.z * BF_z;
         // m_cube.transform.rotation = m_coords_wcs_to_bf.Q();
-        m_cube.transform.rotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), m_B.position() - m_A.position());
+        // m_cube.transform.rotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), BF_x);
+        Quaternion x_rot = Quaternion.AngleAxis(cube_x_rot, BF_x);
+        Quaternion y_rot = Quaternion.AngleAxis(cube_y_rot, BF_z);
+        Quaternion z_rot = Quaternion.AngleAxis(cube_z_rot, BF_z);
+
+        Quaternion xq = Quaternion.FromToRotation(new Vector3(1, 0, 0), BF_x);
+        m_cube.transform.rotation = xq * x_rot * y_rot * z_rot;
     }
+
+
 
     public void update_coordsys()
     {
@@ -245,6 +276,10 @@ public class RagdollBone : MonoBehaviour
         isFixed = fix;
     }
 
+    public void set_cube_pos(float x, float y, float z)
+    {
+        set_cube_pos(new Vector3(x, y, z));
+    }
     public void set_cube_pos(Vector3 pos)
     {
         m_cube_pos_BF = pos;
@@ -293,6 +328,7 @@ public class RagdollBone : MonoBehaviour
         {
             m_owner.add_constraint(m_stick[i]);
         }
+        m_owner.add_ragdoll_bone(this);
 
         update_coordsys();
 
@@ -308,6 +344,7 @@ public class RagdollBone : MonoBehaviour
         m_mass = A_to_B * A_to_C * A_to_D;
 
         m_cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        m_cube.name = m_name;
     }
 
     public void set_obb_size(Vector3 size)

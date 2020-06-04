@@ -120,9 +120,6 @@ public class MyHingeJoint : MyJoint
         Vector3 pAtopBPos = pAtoHinge + hingeTopBPos;
         Vector3 pAtopBNeg = pAtoHinge + hingetopBNeg;
 
-        Debug.Log(pAtopBPos);
-        Debug.Log(pAtopBNeg);
-
         pos_off = pAtopBPos.magnitude;
         neg_off = pAtopBNeg.magnitude;
         m_stick_pos.SetRestLength(pos_off);
@@ -143,11 +140,11 @@ public class MyHingeJoint : MyJoint
         Vector3 pB = m_pB_1.position();
         m_coords_wcs_to_bf.xform_point(pB);
 
-        if ((m_pB_1.position() - m_pA_1.position()).magnitude > pos_off)
+        if ((m_pB_1.position() - m_pA_1.position()).magnitude < pos_off)
         {
             m_stick_pos.satisfy();
         }
-        if ((m_pB_2.position() - m_pA_1.position()).magnitude > neg_off)
+        if ((m_pB_2.position() - m_pA_1.position()).magnitude < neg_off)
         {
             m_stick_neg.satisfy();
         }

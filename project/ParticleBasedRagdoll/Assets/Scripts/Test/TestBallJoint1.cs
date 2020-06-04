@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestBallJoint2 : MonoBehaviour
+public class TestBallJoint1 : MonoBehaviour
 {
     public Particle A1;
     public Particle A2;
