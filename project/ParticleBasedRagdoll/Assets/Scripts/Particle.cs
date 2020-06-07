@@ -25,6 +25,7 @@ public class Particle
     public Vector3 m_a;             // current acceleration
     public float m_mass;        // mass, double.MaxValue means fixed particle
     public float m_inv_mass; // inverse mass, 0 means fixed particle
+    public bool m_fixed;
 
     public Particle()
     {
@@ -40,6 +41,12 @@ public class Particle
 
         stepMethod = StepMethod.ImplicitEuler;
         implicit_iteration = 3;
+        m_fixed = false;
+    }
+
+    public void set_fixed(bool fix)
+    {
+        m_fixed = fix;
     }
 
     public Vector3 position() { return m_r; }
@@ -87,24 +94,29 @@ public class Particle
 
     public void add_force(Vector3 gravity, float delta_t)
     {
-        switch (stepMethod)
+        if (m_fixed)
         {
-            case StepMethod.ExplicitEluer:
-                explicitEuler(gravity, delta_t);
-                break;
-            case StepMethod.ImplicitEuler:
-                implicitEuler(gravity, delta_t);
-                break;
-            case StepMethod.Midpoint:
-                midpoint(gravity, delta_t);
-                break;
-            case StepMethod.Verlet:
-            default:
-                verlet(gravity, delta_t);
-                break;
-
+            m_r = m_init_r;
         }
-        
+        else
+        {
+            switch (stepMethod)
+            {
+                case StepMethod.ExplicitEluer:
+                    explicitEuler(gravity, delta_t);
+                    break;
+                case StepMethod.ImplicitEuler:
+                    implicitEuler(gravity, delta_t);
+                    break;
+                case StepMethod.Midpoint:
+                    midpoint(gravity, delta_t);
+                    break;
+                case StepMethod.Verlet:
+                default:
+                    verlet(gravity, delta_t);
+                    break;
+            }
+        }
     }
 
     private void explicitEuler(Vector3 gravity, float delta_t)

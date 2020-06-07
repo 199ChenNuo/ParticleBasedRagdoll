@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class TestBallJoint1 : MonoBehaviour
 {
-    public Particle A1;
-    public Particle A2;
-    public Particle A3;
-    public Particle A4;
+    public float angle_limit = 90;
+    Particle A1;
+    Particle A2;
+    Particle A3;
+    Particle A4;
 
     // bone B and bone A shares a particle, so I do not declare B4
-    public Particle B1;
-    public Particle B2;
-    public Particle B3;
+    Particle B1;
+    Particle B2;
+    Particle B3;
 
-    public RagdollBone boneA;
-    public RagdollBone boneB;
+    RagdollBone boneA;
+    RagdollBone boneB;
 
-    public BallJoint ball;
+    BallJoint ball;
 
-    public Ragdoll ragdoll;
+    Ragdoll ragdoll;
     // Start is called before the first frame update
     void Start()
     {
@@ -66,7 +67,7 @@ public class TestBallJoint1 : MonoBehaviour
         boneB.set_size(new Vector3(5.5f, 2, 2));
         boneB.set_cube_pos(new Vector3(0.5f, 0, 0));
 
-        ball.init(boneA, boneB, A4, B3, 1, new Vector3(1, 0, 0));
+        ball.init(boneA, boneB, A4, B3, angle_limit, new Vector3(1, 0, 0));
 
         ragdoll.add_ragdoll_bone(boneA);
         ragdoll.add_ragdoll_bone(boneB);

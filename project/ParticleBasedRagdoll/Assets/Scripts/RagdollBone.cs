@@ -25,8 +25,8 @@ public class RagdollBone
     public string Name() { return m_name; }
     public void setname(string name) { m_name = name; }
 
-    public Ragdoll m_owner;
-    public List<StickConstraint> m_stick = new List<StickConstraint>(new StickConstraint[6]);
+    Ragdoll m_owner;
+    public List<StickConstraint> m_stick;
 
 
     public Vector3 m_coord_T;
@@ -35,6 +35,10 @@ public class RagdollBone
 
     public CoorSys m_coords_wcs_to_bf;
     public CoorSys m_coords_bf_to_wcs;
+
+    private Vector3 BF_x;
+    private Vector3 BF_y;
+    private Vector3 BF_z;
 
     // the positio of cube in BF
     public Vector3 m_cube_pos_BF;
@@ -110,7 +114,9 @@ public class RagdollBone
     }
     public void set_size(Vector3 size)
     {
-        m_cube.transform.localScale = size;
+        // m_cube.transform.localScale = size;
+        // m_cube.transform.localScale = size.x * 
+        m_cube.transform.localScale = size.x * BF_x + size.y * BF_y + size.z * BF_z;
     }
 
     public void set_cube_rot(float x_rot, float y_rot, float z_rot)
@@ -129,12 +135,17 @@ public class RagdollBone
         m_fixed = false;
         m_mass = 1;
         m_ragdoll_bones = new List<RagdollBone>();
+        m_stick = new List<StickConstraint>();
         visualiza_particle = visualize;
 
         m_cube_pos_BF = Vector3.zero;
         cube_x_rot = 0;
         cube_y_rot = 0;
         cube_z_rot = 0;
+
+        BF_x = Vector3.right;
+        BF_y = Vector3.up;
+        BF_z = Vector3.forward;
 
         if (visualiza_particle)
         {
@@ -207,9 +218,6 @@ public class RagdollBone
 
     private void update_cube_position()
     {
-        Vector3 BF_x = (m_B.position() - m_A.position()).normalized;
-        Vector3 BF_z = Vector3.Cross(BF_x, m_D.position() - m_A.position()).normalized;
-        Vector3 BF_y = Vector3.Cross(BF_z, BF_x);
         /*
         Vector3 cube_pos_wcs = m_cube_pos_BF;
         cube_pos_wcs = m_coords_bf_to_wcs.xform_point(cube_pos_wcs);
@@ -233,9 +241,9 @@ public class RagdollBone
 
     public void update_coordsys()
     {
-        Vector3 BF_x = (m_B.position() - m_A.position()).normalized;
-        Vector3 BF_z = Vector3.Cross(BF_x, m_D.position() - m_A.position()).normalized;
-        Vector3 BF_y = Vector3.Cross(BF_z, BF_x);
+        BF_x = (m_B.position() - m_A.position()).normalized;
+        BF_z = Vector3.Cross(BF_x, m_D.position() - m_A.position()).normalized;
+        BF_y = Vector3.Cross(BF_z, BF_x);
 
         if (visualiza_particle)
         {
@@ -274,6 +282,7 @@ public class RagdollBone
     public void set_fixed(bool fix)
     {
         isFixed = fix;
+       
     }
 
     public void set_cube_pos(float x, float y, float z)
@@ -306,7 +315,7 @@ public class RagdollBone
 
         for (int i = 0; i < 6; ++i)
         {
-            m_stick[i] = new StickConstraint();
+            m_stick.Add(new StickConstraint());
         }
 
         m_stick[0].init(A, B);
@@ -323,11 +332,6 @@ public class RagdollBone
         m_stick[5].setname(m_name + "-5");
 
 
-
-        for (int i = 0; i < 6; ++i)
-        {
-            m_owner.add_constraint(m_stick[i]);
-        }
         m_owner.add_ragdoll_bone(this);
 
         update_coordsys();

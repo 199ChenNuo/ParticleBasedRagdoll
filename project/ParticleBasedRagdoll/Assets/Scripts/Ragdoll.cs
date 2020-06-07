@@ -16,7 +16,6 @@ public class Ragdoll
 
     public void add_ragdoll_bone(RagdollBone bone)
     {
-        // TODO: atomatice add stick constraint in bone to ragdoll
         bone.connect(this);
         m_ragdoll_bones.Add(bone);
 
@@ -101,6 +100,11 @@ public class Ragdoll
             foreach(StickConstraint stickConstraint in m_stick_constraints)
             {
                 stickConstraint.satisfy();
+                while (stickConstraint.get_current_len() >= stickConstraint.get_rest_len() * 1.1f)
+                {
+                    Debug.Log("stickConstraint " + stickConstraint.name() + " vilated.");
+                    stickConstraint.satisfy();
+                }
             }
 
             foreach (RagdollBone bone in m_ragdoll_bones)

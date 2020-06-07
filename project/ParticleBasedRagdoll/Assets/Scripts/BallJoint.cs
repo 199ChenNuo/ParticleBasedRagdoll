@@ -34,6 +34,13 @@ public class BallJoint : MyJoint
 
     public Vector3 m_plane_normal_BF;
 
+    public void init(Ragdoll owner, RagdollBone A, RagdollBone B, Particle p, Particle ref_p,
+        float angle, Vector3 plane_normal)
+    {
+        init(A, B, p, ref_p, angle, plane_normal);
+        owner.add_constraint(this);
+
+    }
 
     /// <summary>
     /// 

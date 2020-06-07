@@ -235,7 +235,7 @@ public class SingeRagdoll : MonoBehaviour
         left_overarm = new RagdollBone(true);
         left_overarm.init(ragdoll, p28, p29, p27, p8, "left overarm");
         left_overarm.set_cube_pos(overarm_y/2, overarm_x/2, 0);
-        left_overarm.set_cube_size(overarm_y, overarm_x, z_depth, cube_scale);
+        left_overarm.set_cube_size(overarm_x, overarm_y, z_depth, cube_scale);
         left_underarm = new RagdollBone(true);
         left_underarm.init(ragdoll, p31, p29, p28, p30, "left underarm");
         left_underarm.set_cube_pos(underarm_x/2, underarm_y/2, 0);
@@ -248,7 +248,7 @@ public class SingeRagdoll : MonoBehaviour
         right_overarm = new RagdollBone(true);
         right_overarm.init(ragdoll, p35, p36, p9, p34, "right overarm");
         right_overarm.set_cube_pos(overarm_y/2, overarm_x/2, 0);
-        right_overarm.set_cube_size(overarm_y, overarm_x, z_depth, cube_scale);
+        right_overarm.set_cube_size(overarm_x, overarm_y, z_depth, cube_scale);
         right_underarm = new RagdollBone(true);
         right_underarm.init(ragdoll, p36, p38, p35, p37, "right underarm");
         right_underarm.set_cube_pos(underarm_x/2, underarm_y/2, 0);

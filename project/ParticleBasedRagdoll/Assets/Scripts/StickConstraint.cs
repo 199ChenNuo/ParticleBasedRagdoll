@@ -20,6 +20,8 @@ public class StickConstraint : MyJoint
     public void SetRestLength(float len) { m_length = len; }
     public void setname(string name) { m_name = name; }
     public string name() { return m_name; }
+    public float get_current_len() { return (m_A.position() - m_B.position()).magnitude; }
+    public float get_rest_len() { return (float)m_length; }
     #endregion
 
     public StickConstraint()
@@ -72,11 +74,25 @@ public class StickConstraint : MyJoint
     {
         Vector3 delta = m_A.position() - m_B.position();
         float delta_length = delta.magnitude;
+        // Debug.Log(delta_length - m_length);
         float diff = 0.5f * (float)((delta_length - m_length) / delta_length);
         
-
-        m_A.m_r -= diff * delta;
-        m_B.m_r += diff * delta;
+        if (m_A.m_fixed)
+        {
+            m_A.m_r = m_A.m_init_r;
+            m_B.m_r = (m_B.m_r - m_A.m_r).normalized * (float)m_length;
+        }
+        else if (m_B.m_fixed)
+        {
+            m_B.m_r = m_B.m_init_r;
+            m_A.m_r = (m_A.m_r - m_B.m_r).normalized * (float)m_length;
+        }
+        else
+        {
+            m_A.m_r -= diff * delta;
+            m_B.m_r += diff * delta;
+        }
+        
         
     }
 
