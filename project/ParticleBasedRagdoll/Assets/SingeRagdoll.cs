@@ -195,6 +195,8 @@ public class SingeRagdoll : MonoBehaviour
         head.init(ragdoll, p1, p2, p3, p4, "head");
         head.set_cube_pos(head_x / 2, head_y / 2, 0);
         head.set_cube_size(head_x, head_y, z_depth, cube_scale);
+        // head.cube().GetComponent<BoxCollider>().size = new Vector3(head_x, head_y, z_depth) * cube_scale;
+        head.cube().GetComponent<BoxCollider>().isTrigger = true;
         neck = new RagdollBone(true);
         neck.init(ragdoll, p3, p4, p5, p6, "neck");
         neck.set_cube_pos(neck_x / 2, neck_y / 2, 0);
@@ -257,16 +259,14 @@ public class SingeRagdoll : MonoBehaviour
         right_hand.init(ragdoll, p38, p40, p37, p39, "right hand");
         right_hand.set_cube_pos(hand_x/2, hand_y/2, 0);
         right_hand.set_cube_size(hand_x, hand_y, z_depth, cube_scale);
-#if true
-        left_hand.set_fixed(true);
-#endif
+
 
         head_to_neck = new MyHingeJoint();
         head_to_neck.init(head, neck, p3, p4, 45, 45);
         neck_to_chest = new BallJoint();
-        neck_to_chest.init(neck, chest, p6, p7, 45, new Vector3(0, 0, 1));
+        neck_to_chest.init(chest, neck, p6, p5, 30, new Vector3(0, 0, 1));
         chest_to_hip = new BallJoint();
-        chest_to_hip.init(chest, hip, p7, p10, 45, new Vector3(0, 0, 1));
+        chest_to_hip.init(chest, hip, p7, p10, 30, new Vector3(0, 0, 1));
         left_hip_to_thigh = new BallJoint();
         left_hip_to_thigh.init(hip, left_thigh, p11, p13, 90, new Vector3(0, 0, 1));
         left_thigh_to_underleg = new MyHingeJoint();
@@ -291,6 +291,29 @@ public class SingeRagdoll : MonoBehaviour
         right_overarm_to_underarm.init(right_overarm, right_underarm, p35, p36, 180, 0);
         right_arm_to_hand = new MyHingeJoint();
         right_arm_to_hand.init(right_underarm, right_hand, p37, p38, 90, 90);
+
+#if true
+        left_hand.set_fixed(true);
+#endif
+
+#if true
+        head.cube().GetComponent<BoxCollider>().isTrigger = true;
+        neck.cube().GetComponent<BoxCollider>().isTrigger = true;
+        chest.cube().GetComponent<BoxCollider>().isTrigger = true;
+        hip.cube().GetComponent<BoxCollider>().isTrigger = true;
+        left_thigh.cube().GetComponent<BoxCollider>().isTrigger = true;
+        left_underleg.cube().GetComponent<BoxCollider>().isTrigger = true;
+        left_feet.cube().GetComponent<BoxCollider>().isTrigger = true;
+        right_thigh.cube().GetComponent<BoxCollider>().isTrigger = true;
+        right_underleg.cube().GetComponent<BoxCollider>().isTrigger = true;
+        right_feet.cube().GetComponent<BoxCollider>().isTrigger = true;
+        left_overarm.cube().GetComponent<BoxCollider>().isTrigger = true;
+        left_underarm.cube().GetComponent<BoxCollider>().isTrigger = true;
+        left_hand.cube().GetComponent<BoxCollider>().isTrigger = true;
+        right_overarm.cube().GetComponent<BoxCollider>().isTrigger = true;
+        right_underarm.cube().GetComponent<BoxCollider>().isTrigger = true;
+        right_hand.cube().GetComponent<BoxCollider>().isTrigger = true;
+#endif
 
         ragdoll.add_constraint(head_to_neck);
         ragdoll.add_constraint(neck_to_chest);

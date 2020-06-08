@@ -39,7 +39,7 @@ public class Particle
         m_mass = 1;
         m_inv_mass = 1;
 
-        stepMethod = StepMethod.ImplicitEuler;
+        stepMethod = StepMethod.Verlet;
         implicit_iteration = 3;
         m_fixed = false;
     }
