@@ -114,6 +114,10 @@ public class BallJoint : MyJoint
     plane_normal_WCS = m_A.x_axis() * m_plane_normal_BF.x + m_A.y_axis() * m_plane_normal_BF.y + m_A.z_axis() * m_plane_normal_BF.z;
 
     float current_angle = Vector3.Angle(m_pB_ref.position() - m_ball_particle.position(), plane_normal_WCS);
+        if (current_angle > 90)
+        {
+            current_angle = 180 - current_angle;
+        }
 
     if (Mathf.Abs(current_angle) > m_angle_limit)
     {

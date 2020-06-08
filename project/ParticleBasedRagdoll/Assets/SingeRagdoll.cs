@@ -296,7 +296,7 @@ public class SingeRagdoll : MonoBehaviour
         left_hand.set_fixed(true);
 #endif
 
-#if true
+#if false
         head.cube().GetComponent<BoxCollider>().isTrigger = true;
         neck.cube().GetComponent<BoxCollider>().isTrigger = true;
         chest.cube().GetComponent<BoxCollider>().isTrigger = true;
