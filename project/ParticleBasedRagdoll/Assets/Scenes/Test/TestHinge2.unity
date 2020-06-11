@@ -292,6 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d99ee2e90fabb444e9296d0aefd2e545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angle_limit: 90
 --- !u!4 &392671387
 Transform:
   m_ObjectHideFlags: 0

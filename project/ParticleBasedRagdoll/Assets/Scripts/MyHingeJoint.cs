@@ -34,6 +34,13 @@ public class MyHingeJoint : MyJoint
         m_choice = 1;
     }
 
+    public void init(Ragdoll ragdoll, RagdollBone A, RagdollBone B, Particle p1, Particle p2,
+    float pos_angle, float neg_angle)
+    {
+        init(A, B, p1, p2, pos_angle, neg_angle);
+        ragdoll.add_constraint(this);
+    }
+
     public void init(RagdollBone A, RagdollBone B, Particle p1, Particle p2,
         float pos_angle, float neg_angle)
     {

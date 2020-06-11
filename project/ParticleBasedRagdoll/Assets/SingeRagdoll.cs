@@ -257,10 +257,32 @@ public class SingeRagdoll : MonoBehaviour
         right_hand.init(ragdoll, p38, p40, p37, p39, "right hand");
         right_hand.set_cube_pos(hand_x/2, hand_y/2, 0);
         right_hand.set_cube_size(hand_x, hand_y, z_depth, cube_scale);
-#if true
+
+        neck.set_fixed(true);
+#if false
+        head.set_fixed(true);
+        neck.set_fixed(true);
+        chest.set_fixed(true);
+        hip.set_fixed(true);
+
+        left_overarm.set_fixed(true);
+        left_underarm.set_fixed(true);
         left_hand.set_fixed(true);
+
+        right_overarm.set_fixed(true);
+        right_underarm.set_fixed(true);
+        right_hand.set_fixed(true);
+
+        left_thigh.set_fixed(true);
+        left_underleg.set_fixed(true);
+        left_feet.set_fixed(true);
+
+        right_thigh.set_fixed(true);
+        right_underleg.set_fixed(true);
+        right_feet.set_fixed(true);
 #endif
 
+        
         head_to_neck = new MyHingeJoint();
         head_to_neck.init(head, neck, p3, p4, 45, 45);
         neck_to_chest = new BallJoint();
@@ -307,6 +329,7 @@ public class SingeRagdoll : MonoBehaviour
         ragdoll.add_constraint(right_chest_to_overarm);
         ragdoll.add_constraint(right_overarm_to_underarm);
         ragdoll.add_constraint(right_arm_to_hand);
+        
     }
 
     // Update is called once per frame

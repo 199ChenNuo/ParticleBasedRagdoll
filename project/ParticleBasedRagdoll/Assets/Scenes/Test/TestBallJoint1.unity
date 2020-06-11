@@ -292,8 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5723122579eb38498d68b22f1e4e644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneA: {fileID: 0}
-  boneB: {fileID: 0}
+  angle_limit: 45
 --- !u!4 &1725795174
 Transform:
   m_ObjectHideFlags: 0

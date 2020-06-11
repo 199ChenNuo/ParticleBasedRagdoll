@@ -12,6 +12,7 @@ public class StickConstraint : MyJoint
     public double m_length_sqr; // squard of rest length
     public SatisfyChoice m_choice; // Choice for satisfy strategy.
     public string m_name;
+    public bool is_bone;
     #endregion
 
     #region PropFunc
@@ -31,6 +32,7 @@ public class StickConstraint : MyJoint
         m_length = 0;
         m_length_sqr = 0;
         m_choice = (SatisfyChoice)2;
+        is_bone = false;
     }
     public void init(Particle b_A, Particle b_B, int choice = 0)
     {

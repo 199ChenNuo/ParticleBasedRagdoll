@@ -10,14 +10,14 @@ public class RagdollBone
     public Particle m_D;
 
     public bool visualiza_particle;
-     LineRenderer line;
-     LineRenderer xline;
-     LineRenderer yline;
-     LineRenderer zline;
-     GameObject gb_a;
-     GameObject gb_b;
-     GameObject gb_c;
-     GameObject gb_d;
+    LineRenderer line;
+    LineRenderer xline;
+    LineRenderer yline;
+    LineRenderer zline;
+    GameObject gb_a;
+    GameObject gb_b;
+    GameObject gb_c;
+    GameObject gb_d;
 
     public bool isFixed;
 
@@ -39,6 +39,10 @@ public class RagdollBone
     private Vector3 BF_x;
     private Vector3 BF_y;
     private Vector3 BF_z;
+
+    public Vector3 x_axis() { return BF_x; }
+    public Vector3 y_axis() { return BF_y; }
+    public Vector3 z_axis() { return BF_z; }
 
     // the positio of cube in BF
     public Vector3 m_cube_pos_BF;
@@ -67,6 +71,14 @@ public class RagdollBone
         m_B.add_force(force, delta_t);
         m_C.add_force(force, delta_t);
         m_D.add_force(force, delta_t);
+    }
+
+    public void damp(float damping)
+    {
+        m_A.damp(damping);
+        m_B.damp(damping);
+        m_C.damp(damping);
+        m_D.damp(damping);
     }
 
     public void connect(Ragdoll owner)
@@ -282,7 +294,12 @@ public class RagdollBone
     public void set_fixed(bool fix)
     {
         isFixed = fix;
-       
+        
+        m_A.set_fixed(fix);
+        m_B.set_fixed(fix);
+        m_C.set_fixed(fix);
+        m_D.set_fixed(fix);
+        
     }
 
     public void set_cube_pos(float x, float y, float z)
@@ -301,6 +318,7 @@ public class RagdollBone
         m_B = B;
         m_C = C;
         m_D = D;
+        
         m_name = name;
 
         isFixed = false;
@@ -330,6 +348,12 @@ public class RagdollBone
         m_stick[3].setname(m_name + "-3");
         m_stick[4].setname(m_name + "-4");
         m_stick[5].setname(m_name + "-5");
+        m_stick[0].is_bone = true;
+        m_stick[1].is_bone = true;
+        m_stick[2].is_bone = true;
+        m_stick[3].is_bone = true;
+        m_stick[4].is_bone = true;
+        m_stick[5].is_bone = true;
 
 
         m_owner.add_ragdoll_bone(this);

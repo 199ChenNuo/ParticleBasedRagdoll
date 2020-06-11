@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -82,7 +82,7 @@ public class TestStick2 : MonoBehaviour
         sphereB.transform.position = B.position();
         sphereC.transform.position = C.position();
 #pragma warning disable CS0618 // 类型或成员已过时
-        line.SetVertexCount(3);
+        line.SetVertexCount(4);
 #pragma warning restore CS0618 // 类型或成员已过时
 #pragma warning disable CS0618 // 类型或成员已过时
         line.SetWidth(0.03f, 0.03f);
@@ -90,6 +90,7 @@ public class TestStick2 : MonoBehaviour
         line.SetPosition(0, A.position());
         line.SetPosition(1, B.position());
         line.SetPosition(2, C.position());
+        line.SetPosition(3, A.position());
 
 
         scene_number++;

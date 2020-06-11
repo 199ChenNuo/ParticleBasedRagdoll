@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class TestBallJoint2 : MonoBehaviour
 {
-    public Particle A;
-    public Particle B;
-    public Particle C;
-    public Particle D;
-    public Particle E;
-    public Particle F;
-    public Particle G;
+    Particle A;
+    Particle B;
+    Particle C;
+    Particle D;
+    Particle E;
+    Particle F;
+    Particle G;
 
-    public RagdollBone boneA;
-    public RagdollBone boneB;
+    RagdollBone boneA;
+    RagdollBone boneB;
 
-    public BallJoint ball;
+    MyBallJoint ball;
 
-    public Ragdoll ragdoll;
+    Ragdoll ragdoll;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,23 +32,23 @@ public class TestBallJoint2 : MonoBehaviour
         boneA = new RagdollBone(true);
         boneB = new RagdollBone(true);
 
-        ball = new BallJoint();
+        ball = new MyBallJoint();
 
         ragdoll = new Ragdoll();
 
-        A.set_init_position(new Vector3(0, 0, 0));
-        B.set_init_position(new Vector3(3, 0, -3));
-        C.set_init_position(new Vector3(6, 0, 0));
-        D.set_init_position(new Vector3(3, 0, 3));
-        E.set_init_position(new Vector3(9, 0, -3));
-        F.set_init_position(new Vector3(12, 0, 0));
-        G.set_init_position(new Vector3(9, 0, 3));
+        A.set_init_position(new Vector3(0, 3, 0));
+        B.set_init_position(new Vector3(0, -3, 0));
+        C.set_init_position(new Vector3(3, 0, 0));
+        D.set_init_position(new Vector3(6, 0, 0));
+        E.set_init_position(new Vector3(9, 0, 0));
+        F.set_init_position(new Vector3(12, 3, 0));
+        G.set_init_position(new Vector3(12, -3, 0));
 
 
         boneA.init(ragdoll, A, C, B, D, "fixed_bone");
         boneA.set_fixed(true);
         boneA.set_color(Color.blue);
-        boneA.set_size(new Vector3(4, 2, 2));
+        boneA.set_size(new Vector3(6, 6, 2));
         boneA.set_cube_pos(new Vector3(3, 0, 0));
         // boneA.set_cube_rot(0, 0, 0);
 
@@ -57,11 +57,7 @@ public class TestBallJoint2 : MonoBehaviour
         boneB.set_size(new Vector3(5.5f, 2, 2));
         boneB.set_cube_pos(new Vector3(3, 0, 0));
         
-        ball.init(boneA, boneB, C, G, 100, new Vector3(1, 2, 0));
-
-        ragdoll.add_ragdoll_bone(boneA);
-        ragdoll.add_ragdoll_bone(boneB);
-        ragdoll.add_constraint(ball);
+        ball.init(ragdoll, boneA, boneB, D, C, E, 45, new Vector3(1, 2, 0));
     }
 
     // Update is called once per frame

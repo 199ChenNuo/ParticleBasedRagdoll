@@ -6,6 +6,7 @@ public class Ragdoll
 {
     public List<RagdollBone> m_ragdoll_bones;
     public List<BallJoint> m_ball_joints;
+    public List<MyBallJoint> m_my_ball_joints;
     public List<HingeJoint> m_hinge_joints;
 
     public List<MyHingeJoint> m_my_hinge_joint;
@@ -36,6 +37,7 @@ public class Ragdoll
         m_friction = 0.00025f;
         m_ragdoll_bones = new List<RagdollBone>();
         m_ball_joints = new List<BallJoint>();
+        m_my_ball_joints = new List<MyBallJoint>();
         m_hinge_joints = new List<HingeJoint>();
         m_stick_constraints = new List<StickConstraint>();
 
@@ -50,6 +52,10 @@ public class Ragdoll
     public void add_constraint(BallJoint joint)
     {
         m_ball_joints.Add(joint);
+    }
+    public void add_constraint(MyBallJoint joint)
+    {
+        m_my_ball_joints.Add(joint);
     }
 
     public void add_constraint(MyHingeJoint joint)
@@ -89,6 +95,10 @@ public class Ragdoll
             {
                 ballJoint.satisfy();
             }
+            foreach(MyBallJoint ballJoint in m_my_ball_joints)
+            {
+                ballJoint.satisfy();
+            }
             foreach(HingeJoint hinge in m_hinge_joints)
             {
                 hinge.satisfy();
@@ -100,11 +110,14 @@ public class Ragdoll
             foreach(StickConstraint stickConstraint in m_stick_constraints)
             {
                 stickConstraint.satisfy();
-                while (stickConstraint.get_current_len() >= stickConstraint.get_rest_len() * 1.1f)
+                /*
+                while (stickConstraint.get_current_len() >= stickConstraint.get_rest_len() * 1.1f && stickConstraint.is_bone)
                 {
-                    Debug.Log("stickConstraint " + stickConstraint.name() + " vilated.");
+                    // Debug.Log("stickConstraint " + stickConstraint.name() + " vilated.");
                     stickConstraint.satisfy();
+                    
                 }
+                */
             }
 
             foreach (RagdollBone bone in m_ragdoll_bones)

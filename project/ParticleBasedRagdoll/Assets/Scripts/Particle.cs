@@ -119,6 +119,12 @@ public class Particle
         }
     }
 
+    public void damp(float damping)
+    {
+        damping = Mathf.Abs(damping);
+        m_v *= damping;
+    }
+
     private void explicitEuler(Vector3 gravity, float delta_t)
     {
         // store these values in case the stepMethod is changed during simulation

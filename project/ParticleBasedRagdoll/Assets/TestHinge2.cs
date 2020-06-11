@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TestHinge2 : MonoBehaviour
 {
+    [Range(0, 180)]
+    public float angle_limit;
     Particle A;
     Particle B;
     Particle C;
@@ -54,7 +56,7 @@ public class TestHinge2 : MonoBehaviour
         ragdoll.add_ragdoll_bone(boneB);
 
         hinge = new MyHingeJoint();
-        hinge.init(boneA, boneB, B, C, 100, 100);
+        hinge.init(boneA, boneB, B, C, angle_limit, 100);
         ragdoll.add_constraint(hinge);
     }
 
