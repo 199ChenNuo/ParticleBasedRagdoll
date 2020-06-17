@@ -76,7 +76,7 @@ public class TestMyBallJoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ragdoll.run(new Vector3(0, -9, 0), 0.1f);
+        ragdoll.run(new Vector3(0, -9, 0), 0.05f);
     }
 
     public void changeAngleLimit()
